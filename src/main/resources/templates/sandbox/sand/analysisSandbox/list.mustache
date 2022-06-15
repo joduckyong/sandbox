@@ -90,7 +90,7 @@
           <div class="modal-dialog modal-md">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title" >배치 데이터 업로드</h4>
+                <h4 class="modal-title">분석 데이터 업로드</h4>
                 <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
               </div>
               <div class="modal-body">
@@ -99,63 +99,16 @@
                     <table class="table table-striped">
                       <thead>
                         <tr> 
-                          <th colspan="3">분석 이미지 데이터셋 업로드</th>
+                          <th colspan="4" style="text-align: center;">분석 이미지 데이터셋 업로드</th>
                         </tr>
                         <tr> 
-                          <th style="text-align: center;">구분</th>
-                          <th style="text-align: center;">하위 폴더명</th>
-                          <th style="text-align: center;">파일 업로드</th>
-                        </tr>                        
-                      </thead>
-                      <tbody id="">
-                      	<tr>
-                      		<td style="text-align: center;">분석 데이터</td>
-                      		<td style="text-align: center;">analysis_original</td>
-                      		<td style="text-align: center;">
-                      			<button class="btn btn-sm btn-primary" onclick="fileCheck('B17000');">파일 업로드</button>
-                      			<input type="file" id="file_B17000" onchange="addFile(this,'B17000');" multiple style="display:none;">
-                      		</td>
-                      	</tr>
-                      </tbody>                      
-                    </table>
-                  </div>
-                  <div class="table_responsive">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr> 
-                          <th colspan="3">학습 이미지 데이터셋 업로드</th>
-                        </tr>
-                        <tr> 
-                          <th style="text-align: center;">구분</th>
-                          <th style="text-align: center;">하위 폴더명</th>
-                          <th style="text-align: center;">파일 업로드</th>
+                          <th style="text-align: center;">이미지 데이터셋 이름</th>
+                          <th style="text-align: center;">데이터 구분</th>
+                          <th style="text-align: center;">파일 개수</th>
+                          <th style="text-align: center;">업로드</th>
                         </tr>
                       </thead>
-                      <tbody id="">
-                      	<tr>
-                      		<td style="text-align: center;">학습 데이터</td>
-                      		<td style="text-align: center;">train</td>
-                      		<td style="text-align: center;">
-                      			<button class="btn btn-sm btn-primary" onclick="fileCheck('B17001');">파일 업로드</button>
-                      			<input type="file" id="file_B17001" onchange="addFile(this,'B17001');" multiple style="display:none;">
-                      		</td>
-                      	</tr>                      
-                      	<tr>
-                      		<td style="text-align: center;">검증 데이터</td>
-                      		<td style="text-align: center;">Valid</td>
-                      		<td style="text-align: center;">
-                      			<button class="btn btn-sm btn-primary" onclick="fileCheck('B17002');">파일 업로드</button>
-                      			<input type="file" id="file_B17002" onchange="addFile(this,'B17002');" multiple style="display:none;">
-                      		</td>
-                      	</tr>                      
-                      	<tr>
-                      		<td style="text-align: center;">테스트 데이터</td>
-                      		<td style="text-align: center;">test</td>
-                      		<td style="text-align: center;">
-                      			<button class="btn btn-sm btn-primary" onclick="fileCheck('B17003');">파일 업로드</button>
-                      			<input type="file" id="file_B17003" onchange="addFile(this,'B17003');" multiple style="display:none;">
-                      		</td>
-                      	</tr>                      
+                      <tbody id="sandboxImageDatasetInfoGet">
                       </tbody>
                     </table>
                   </div>
@@ -178,7 +131,7 @@
               </div>
               <div class="modal-body">
                 <div class="x_content"> 
-                  <h5>pm10_anlysis</h5>
+                  <h5>▣ <span id="programId"></span></h5>
                   <div class="table_responsive">
                     <table class="table table-striped">
                       <colgroup>
@@ -192,10 +145,6 @@
                         </tr>
                       </thead>
                       <tbody id="sandboxesPrograms">
-                        <tr>
-                          <td style="text-align: center;">Zeppelin</td>
-                          <td style="text-align: center;" class="td_btn"><a class="btn btn-primary btn-sm" href="" download>열기</a> </td>
-                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -272,9 +221,13 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '    <button class="btn_pause red" onclick=sandboxesAnalysisStop("'+el.sandbox_id+'");>■</button>';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2"><span class="blue bold">결과조회</span></td>';
-	                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=openModal("data_upload")>업로드</button></td>';
+	                        if(el.anals_use_prpos_cd === 'B13002'){
+		                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxImageDatasetInfoGet("'+el.sandbox_id+'")>업로드</button></td>';
+	                        }else{
+		                        insertTr += '  <td rowspan="2"></td>';
+	                        }
 	                        insertTr += '  <td rowspan="2">';
-	                        insertTr += '    <button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=openModal("program")>프로그램</button>';
+	                        insertTr += '    <button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxesPrograms("'+el.sandbox_id+'","'+isEmpty(el.sandbox_nm)+'")>프로그램</button>';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.sandbox_status)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.creator_id)+'</td>';
@@ -335,7 +288,7 @@ const sandboxesRun = function (sandbox_id) {
     };		
     $.ajax({
         type: 'POST',
-        url: url+'/sandboxDelete',
+        url: url+'/sandboxesRun',
         dataType: 'json',
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
@@ -441,10 +394,10 @@ const sandboxHealthCheck = function () {
 }
 
 //샌드박스 프로그램 조회
-const sandboxesPrograms = function(sandbox_id){
+const sandboxesPrograms = function(sandbox_id, sandbox_nm){
 	
 	const data = {
-	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/programs',
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/programs/get',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   				
 	    };		
@@ -462,8 +415,8 @@ const sandboxesPrograms = function(sandbox_id){
 				  	    $.each(data.contents, function (idx, el) {
 				  	    	
 	                        insertTr += '<tr>';
-	                        insertTr += '  <td style="text-align: center;"></td>';
-	                        insertTr += '  <td style="text-align: center;" class="td_btn"><a class="btn btn-primary btn-sm" href="" download>열기</a> </td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.progrm_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;" class="td_btn"><a class="btn btn-primary btn-sm" href="'+el.progrm_url+'" target="_blank">열기</a> </td>';
 	                        insertTr += '</tr>';
 	                        
 				  	    });
@@ -475,6 +428,52 @@ const sandboxesPrograms = function(sandbox_id){
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
+	
+	$("#programId").text(sandbox_nm);
+    openModal("program");   
+    
+}
+
+//샌드박스 이미지 데이터셋 정보 조회
+const sandboxImageDatasetInfoGet = function(sandbox_id){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/image-datasets/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxImageDatasetInfoGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxImageDatasetInfoGet").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.file_cnt+'</td>';
+	                        insertTr += '  <td style="text-align: center;"><button class="btn btn-sm btn-primary" onclick="fileCheck('+el.anals_data_sect_cd+');">파일 업로드</button><input type="file" id="'+el.anals_data_sect_cd+'" onchange="addFile(this,'+el.anals_data_sect_cd+');" multiple style="display:none;"></td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#sandboxImageDatasetInfoGet").append(insertTr);
+		  	    	}
+		  	    	
+		  	  }
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	
+    openModal("data_upload");   
+    
 }
 
 //샌드박스 삭제
@@ -511,7 +510,7 @@ const btnDel = function(){
         }
 
         $("input[name='sandbox_id']:checked").each(function (i) {
-        	imagesDatasetsDelete($(this).val());
+        	sandboxDelete($(this).val());
         });
     }
 }
