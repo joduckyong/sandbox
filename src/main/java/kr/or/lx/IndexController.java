@@ -10,7 +10,7 @@ public class IndexController {
     @GetMapping("/")
     public String index() {
         
-        return "index";
+        return "sandbox/env/dockerImage/list";
     }
     
     @GetMapping("/posts/save")
