@@ -11,11 +11,11 @@
                 <div class="x_content"> <br>
                   <div class="scenario_depth"> 
                     <ul>
-                      <li class="now_depth">데이터 로딩</li>
-                      <li class="temporary_storage">데이터 전처리</li>
-                      <li class="save">결과비교</li>
-                      <li>데이터 재학습 결과</li>
-                      <li>데이터 분석 결과</li>
+                      <li class="now_depth" onclick="step1();" style="cursor:pointer">데이터 로딩</li>
+                      <li class="now_depth" onclick="step2();" style="cursor:pointer">데이터 전처리</li>
+                      <li class="now_depth" onclick="step3();" style="cursor:pointer">결과비교</li>
+                      <li class="save" onclick="step4();" style="cursor:pointer">데이터 재학습 결과</li>
+                      <li class="now_depth" onclick="step5();" style="cursor:pointer">데이터 분석 결과</li>
                     </ul>
                   </div>
                   <div class="progress_tab">
@@ -87,9 +87,27 @@
 {{>layout/footer}}        
 
 <script>
-	function result(){
-		location.href = '/sandbox/sand/analysisSandbox/list';
-	}
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/result/objectDetection';
+
+const step1 = function(){
+	location.href = url+'/step1';
+}
+const step2 = function(){
+	location.href = url+'/step2';
+}
+const step3 = function(){
+	location.href = url+'/step3';
+}
+const step4 = function(){
+	location.href = location.href;
+}
+const step5 = function(){
+	location.href = url+'/step5';
+}
+const result = function(){
+	location.href = url+'/list';
+}
 </script>
 
 

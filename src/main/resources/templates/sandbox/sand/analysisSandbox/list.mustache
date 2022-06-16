@@ -115,6 +115,7 @@
                 </div>
               </div>
               <div class="modal-footer">
+	            <button class="btn btn-primary" type="button" onclick="sandboxAnalysisDataUpload();">업로드</button>
                 <button class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('data_upload')">닫기 </button>
               </div>
             </div>
@@ -156,12 +157,20 @@
             </div>
           </div>
         </div>        
+        <input type="hidden" name="dtl_code" id="dtl_code">
+        <input type="hidden" name="sandbox_id" id="sandbox_id">
+        <input type="hidden" name="image_dataset_id" id="image_dataset_id">
+        
 {{>layout/footer}}        
 
 <script>
 
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/sand/analysisSandbox';
+
+let fileNo = 0;
+let dataFiles = new Array();
+let contents;
 
 // document.title = "LX DT | 샌드박스 관리"; 
 let init_page = 1;				//초기 페이지
@@ -452,6 +461,8 @@ const sandboxImageDatasetInfoGet = function(sandbox_id){
 	    	  $("#sandboxImageDatasetInfoGet").empty();
 		  	  if (data != null) {
 		  	    	if(data.contents != ""){
+		  	    		contents = data.contents;
+		  	    		
 			    	    let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
 				  	    	
@@ -459,7 +470,7 @@ const sandboxImageDatasetInfoGet = function(sandbox_id){
 	                        insertTr += '  <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
 	                        insertTr += '  <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
 	                        insertTr += '  <td style="text-align: center;">'+el.file_cnt+'</td>';
-	                        insertTr += '  <td style="text-align: center;"><button class="btn btn-sm btn-primary" onclick="fileCheck('+el.anals_data_sect_cd+');">파일 업로드</button><input type="file" id="'+el.anals_data_sect_cd+'" onchange="addFile(this,'+el.anals_data_sect_cd+');" multiple style="display:none;"></td>';
+	                        insertTr += '  <td style="text-align: center;"><button id="btn_'+el.anals_data_sect_cd+'" class="btn btn-sm btn-primary" onclick=fileCheck("'+el.anals_data_sect_cd+'");>파일 업로드</button><input type="file" id="file_'+el.anals_data_sect_cd+'" onchange=addFile(this,"'+el.anals_data_sect_cd+'","'+sandbox_id+'","'+el.image_dataset_id+'"); multiple style="display:none;"></td>';
 	                        insertTr += '</tr>';
 	                        
 				  	    });
@@ -474,6 +485,80 @@ const sandboxImageDatasetInfoGet = function(sandbox_id){
 	
     openModal("data_upload");   
     
+}
+
+/* 이미지 데이터셋 파일 업로드 */
+const sandboxAnalysisDataUpload = function() {
+	
+	
+   	if(!confirm('등록 하시겠습니까?')) {
+	}else{
+	    if(fileNo == 0){
+	    	alert("하나이상 첨부해주세요!");
+	    	return;
+	    }
+	    	
+	    var dtl_code = $('#dtl_code').val();
+	    var sandbox_id = $('#sandbox_id').val();
+	    var image_dataset_id = $('#image_dataset_id').val();
+	    
+	    let formData = new FormData();
+	    formData.append("url", '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/upload');
+	    formData.append("creator_id", 'creator');
+	    formData.append("modifier_id", 'modifier');
+	    formData.append("user_id", 'user_id');
+	    formData.append("menu_id", 'menu_id');
+	    formData.append("image_dataset_id", image_dataset_id);
+	    formData.append("anals_data_sect_cd", dtl_code);
+	    
+	//    console.log('url : '+formData.get('url'));
+	    for (let i = 0; i < dataFiles.length; i++) {
+	        formData.append("upload_file", dataFiles[i]);
+	    }
+	    
+	    console.log('dataFiles.length : '+dataFiles.length);
+	    
+	    $.ajax({
+	        type: 'POST',
+	        enctype: "multipart/form-data",
+	        url: url+'/file/sandboxAnalysisDataUpload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: formData,
+	        processData: false,
+	   	    contentType: false,        
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		
+	  		fileNo = 0;
+	  		dataFiles = new Array();
+	  		closeModal('data_upload');
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	    
+}
+
+//첨부파일 추가
+const addFile = function(obj, dtl_code, sandbox_id, image_dataset_id){
+
+    for (const file of obj.files) {
+        // 파일 배열에 담기
+        let reader = new FileReader();
+        reader.onload = function () {
+        	dataFiles.push(file);
+        };
+        
+        reader.readAsDataURL(file);
+        fileNo++;
+	}	
+    
+    $('#dtl_code').val(dtl_code);
+    $('#sandbox_id').val(sandbox_id);
+    $('#image_dataset_id').val(image_dataset_id);
 }
 
 //샌드박스 삭제
@@ -529,6 +614,10 @@ const enterkey = function(e) {
 
 const fileCheck = function(id){
 	$('#file_'+id).trigger("click");
+    $.each(contents, function (idx, el) {
+    	$('#btn_'+el.anals_data_sect_cd).attr("disabled",true); 
+ 	});	
+    $('#btn_'+id).removeAttr('disabled'); 
 }
 
 //모달 열기
