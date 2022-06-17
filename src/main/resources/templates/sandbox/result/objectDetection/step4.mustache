@@ -30,22 +30,12 @@
                               </colgroup>
                               <thead>
                                 <tr>
-                                  <th>파라미터</th>
-                                  <th>정의</th>
-                                  <th>값</th>
+                                  <th style="text-align: center;">파라미터</th>
+                                  <th style="text-align: center;">정의</th>
+                                  <th style="text-align: center;">값</th>
                                 </tr>
                               </thead>                            
-                              <tbody>
-                                <tr>
-                                  <th>Time</th>
-                                  <td>T<sub>1</sub></td>
-                                  <td>T<sub>2</sub></td>
-                                </tr>
-                                <tr>
-                                  <th>값</th>
-                                  <td>V<sub>1</sub></td>
-                                  <td>V<sub>2</sub></td>
-                                </tr>
+                              <tbody id="sandboxAnalysisModelInfo">
                               </tbody>
                             </table>
                           </div>
@@ -90,23 +80,62 @@
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/result/objectDetection';
 
+//샌드박스 결과 조회
+const sandboxAnalysisModelInfo = function(){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-model-info/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxAnalysisModelInfo',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxAnalysisModelInfo").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+                      
+				  	    $.each(data.contents, function (idx, el) {
+		     	          insertTr += '<tr>';
+		                  insertTr += ' <td style="text-align: center;">'+el.anals_model_stage+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.anals_model_dfn+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.anals_model_desc+'</td>';
+		                  insertTr += '</tr>';						  	    	
+				  	    });
+				  	    
+	         	   	    $("#sandboxAnalysisModelInfo").append(insertTr);
+		  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+sandboxAnalysisModelInfo();
+
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/step1/{{sandbox_id}}/{{result_id}}';
 }
 const step2 = function(){
-	location.href = url+'/step2';
+	location.href = url+'/step2/{{sandbox_id}}/{{result_id}}';
 }
 const step3 = function(){
-	location.href = url+'/step3';
+	location.href = url+'/step3/{{sandbox_id}}/{{result_id}}';
 }
 const step4 = function(){
 	location.href = location.href;
 }
 const step5 = function(){
-	location.href = url+'/step5';
+	location.href = url+'/step5/{{sandbox_id}}/{{result_id}}';
 }
 const result = function(){
-	location.href = url+'/list';
+	location.href = '/sandbox/sand/analysisSandbox/list';
 }
 </script>
 

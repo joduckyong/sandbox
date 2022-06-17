@@ -127,7 +127,7 @@ const url = '/sandbox/result/objectDetection';
 const sandboxPretreatModelInfo = function(){
 	
 	const data = {
-	   		url: '/services/sandbox/sandboxes/{sandbox_id}/pretreat-model-info/get',
+	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/pretreat-model-info/get',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   		
 	    };		
@@ -138,10 +138,10 @@ const sandboxPretreatModelInfo = function(){
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
-	    	  $("#sandboxPretreatModelInfo").empty();
+	    	  $("#file_info").empty();
+	    	  $("#model_basic_info").empty();
 		  	  if (data != null) {
 		  	    	if(data.contents != ""){
-		  	    		
 			    	    let insertTr = '';
 				  	    $.each(data.contents.file_info, function (idx, el) {
 		     	          insertTr += '<tr>';
@@ -160,7 +160,6 @@ const sandboxPretreatModelInfo = function(){
 		                  insertTr2 += '</tr>';			                  
 				  	    });
 	         	   	    $("#model_basic_info").append(insertTr2);
-				  	    
 		  	    	}
 		  	  }
 	    	  
@@ -173,7 +172,7 @@ const sandboxPretreatModelInfo = function(){
 const sandboxResultsDataPretreat = function(){
 	
 	const data = {
-	   		url: '/services/sandbox/sandboxes/{sandbox_id}/results/{result_id}/data-pretreat/get',
+	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/data-pretreat/get',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   		
 	    };		
@@ -190,11 +189,11 @@ const sandboxResultsDataPretreat = function(){
 			    	    let insertTr = '';
 			    	    let i = 0;	  
                       
-				  	    $.each(data.contents, function (idx, el) {
+				  	    $.each(data.contents.contents, function (idx, el) {
 		     	          insertTr += '<tr>';
 		                  insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-		                  insertTr += ' <td style="text-align: center;"></td>';
 		                  insertTr += ' <td style="text-align: center;">'+el.pretreat_step_nm+'</td>';
+		                  insertTr += ' <td style="text-align: center;"></td>';
 		                  insertTr += ' <td style="text-align: center;">'+el.created_at+'</td>';
 		                  insertTr += ' <td style="text-align: center;"><button class="btn btn-sm btn-primary" onclick=preview("'+el.pretreat_step_nm+'","'+el.sample_data_file_path+'");>미리보기</button></td>';
 		                  insertTr += '</tr>';						  	    	
@@ -218,25 +217,29 @@ const preview = function(pretreat_step_nm, sample_data_file_path){
 	$('#preview').modal('show');
 }
 
+
+sandboxPretreatModelInfo();
+sandboxResultsDataPretreat();
+
 //모달 닫기
 const closeModal = function(){
 	$('#preview').modal('hide');
 }
 
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/step1/{{sandbox_id}}/{{result_id}}';
 }
 const step2 = function(){
 	location.href = location.href;
 }
 const step3 = function(){
-	location.href = url+'/step3';
+	location.href = url+'/step3/{{sandbox_id}}/{{result_id}}';
 }
 const step4 = function(){
-	location.href = url+'/step4';
+	location.href = url+'/step4/{{sandbox_id}}/{{result_id}}';
 }
 const step5 = function(){
-	location.href = url+'/step5';
+	location.href = url+'/step5/{{sandbox_id}}/{{result_id}}';
 }
 </script>
 

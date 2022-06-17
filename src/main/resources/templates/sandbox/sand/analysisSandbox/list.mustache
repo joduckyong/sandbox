@@ -217,7 +217,7 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '  <td rowspan="2">';
 	                        insertTr += '    <input class="flat" type="radio" name="table_records" name="sandbox_id" value="'+el.sandbox_id+'">';
 	                        insertTr += '  </td>';
-	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" data-target=".download_modal">'+isEmpty(el.sandbox_nm)+'</span></td>';
+	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" >'+isEmpty(el.sandbox_nm)+'</span></td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.scenario_nm_kor)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
@@ -229,7 +229,7 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '    <button class="btn_play" onclick=sandboxesAnalysisRun("'+el.sandbox_id+'");>▶</button>';
 	                        insertTr += '    <button class="btn_pause red" onclick=sandboxesAnalysisStop("'+el.sandbox_id+'");>■</button>';
 	                        insertTr += '  </td>';
-	                        insertTr += '  <td rowspan="2"><span class="blue bold">결과조회</span></td>';
+	                        insertTr += '  <td rowspan="2"><span class="blue bold" style="cursor:pointer" onclick=resultPage("'+el.sandbox_id+'");>결과조회</span></td>';
 	                        if(el.anals_use_prpos_cd === 'B13002'){
 		                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxImageDatasetInfoGet("'+el.sandbox_id+'")>업로드</button></td>';
 	                        }else{
@@ -635,7 +635,11 @@ sandboxesGet(page, size_per_page);
 
 commonCodeSandboxLastStatus();
 
-function jsNext(){
+const resultPage = function(sandbox_id){
+	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;
+}
+
+const jsNext = function(){
 	location.href = '/sandbox/sand/analysisSandbox/step1';
 }
 </script>

@@ -1,13 +1,23 @@
 package kr.or.lx.sandbox.result.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +42,33 @@ public class ObjectDetectionController {
      * 데이터 분석 결과 - 객체 감지 - 데이터 로딩
      * @return
      */
-	@GetMapping("/step1")
-	public String objectDetectionStep1(ModelMap model) throws Exception{
+	@GetMapping("/{step}/{sandbox_id}/{result_id}")
+	public String objectDetectionStep(@PathVariable String step, @PathVariable String sandbox_id, @PathVariable String result_id, ModelMap model) throws Exception{
+		log.info("objectDetectionStep");
 		
-		return "sandbox/result/objectDetection/step1";
+		model.put("sandbox_id", sandbox_id);	
+		model.put("result_id", result_id);	
+		return "sandbox/result/objectDetection/"+step;
+	}
+	
+	@GetMapping("/display/{filename}")
+	public ResponseEntity<Resource> display(@PathVariable String filename, ModelMap model) throws Exception{
+		
+		String path = "C:\\lx-test\\pretreat-sample\\";
+		String fileName = path+filename;
+		FileSystemResource resource = new FileSystemResource(fileName);
+		
+		HttpHeaders header = new HttpHeaders();
+		Path filePath = null;
+		
+		try {
+			filePath = Paths.get(fileName);
+			header.add("Content-Type", Files.probeContentType(filePath));
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(header, HttpStatus.OK);
 	}
 	
 	/**
@@ -55,44 +88,5 @@ public class ObjectDetectionController {
 		return object;
 	}	
 	
-	/**
-     * 데이터 분석 결과 - 객체 감지 - 데이터 전처리
-     * @return
-     */
-	@GetMapping("/step2")
-	public String objectDetectionStep2(ModelMap model) throws Exception{
-		
-		return "sandbox/result/objectDetection/step2";
-	}
-	
-	/**
-     * 데이터 분석 결과 - 객체 감지 - 결과 비교
-     * @return
-     */
-	@GetMapping("/step3")
-	public String objectDetectionStep3(ModelMap model) throws Exception{
-		
-		return "sandbox/result/objectDetection/step3";
-	}
-	
-	/**
-     * 데이터 분석 결과 - 객체 감지 - 데이터 재학습 결과
-     * @return
-     */
-	@GetMapping("/step4")
-	public String objectDetectionStep4(ModelMap model) throws Exception{
-		
-		return "sandbox/result/objectDetection/step4";
-	}
-	
-	/**
-	 * 데이터 분석 결과 - 객체 감지 - 데이터 분석 결과
-	 * @return
-	 */
-	@GetMapping("/step5")
-	public String objectDetectionStep5(ModelMap model) throws Exception{
-		
-		return "sandbox/result/objectDetection/step5";
-	}
 	
 }
