@@ -55,37 +55,7 @@
                           <th>테스트</th>
                         </tr>                        
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>2022.11.11 11:11:11</td>
-                          <td>2022.11.11 11:11:11</td>
-                          <td>완료</td>
-                          <td>1,000</td>
-                          <td>965</td>
-                          <td>676</td>
-                          <td>193</td>
-                          <td>96</td>
-                          <td>19</td>
-                          <td>80</td>
-                          <td><a class="btn btn-primary" href="" data-toggle="modal" data-target=".download_modal">다운로드 </a></td>
-                          <td style="cursor:pointer" onclick="timeseriesStep1();">결과조회</td>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>2022.11.11 11:11:11</td>
-                          <td>2022.11.11 11:11:11</td>
-                          <td>완료</td>
-                          <td>1,000</td>
-                          <td>965</td>
-                          <td>676</td>
-                          <td>193</td>
-                          <td>96</td>
-                          <td>19</td>
-                          <td>80</td>
-                          <td><a class="btn btn-primary" href="" data-toggle="modal" data-target=".download_modal">다운로드 </a></td>
-                          <td style="cursor:pointer" onclick="objectStep1();">결과조회</td>
-                        </tr>
+                      <tbody id="sandboxResultsGet">
                       </tbody>
                     </table>
                   </div>
@@ -313,15 +283,74 @@
 {{>layout/footer}}        
 
 <script>
-	function jsAdd(){
-		location.href = '/sandbox/dataset/imageDataset/add';
+document.title = "LX DT | 데이터 분석 결과 조회"; 
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/result/analysisResult';
+
+const sandboxResultsGet = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	            		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxResultsGet',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    
+					$("#sandboxResultsGet").empty();
+		     	    let i = 0;	
+	     	        let insertTr = '';
+			  	    $.each(data.contents.contents, function (idx, el) {
+		                  insertTr += '<tr>';
+		                  insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.analysis_exec_start_time)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.analysis_exec_complete_time)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.result_status)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.orgin_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.pretreat_result_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.train_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.valid_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.test_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.analysis_data_cnt)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.model_accuracy)+'</td>';
+		                  insertTr += ' <td style="text-align: center;"><a class="btn btn-primary" href="" data-toggle="modal" data-target=".download_modal">다운로드 </a></td>';
+		                  insertTr += ' <td style="text-align: center;cursor:pointer" onclick=result("object","'+isEmpty(el.result_id)+'")>결과조회</td>';
+		                  insertTr += '</tr>';
+		                  insertTr += '<tr>';
+				    });     	
+          	   	    $("#sandboxResultsGet").append(insertTr);
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+sandboxResultsGet();
+
+//시계열 분석
+const timeseriesStep1 = function(result_id){
+	location.href = '/sandbox/result/timeseriesAnalysis/step1/{{sandbox_id}}/'+result_id;
+}
+//객체감지
+const objectStep1 = function(result_id){
+	location.href = '/sandbox/result/objectDetection/step1/{{sandbox_id}}/'+result_id;
+}
+//결과조회 선택
+const result = function(type, result_id){
+	if(type == 'time'){
+		timeseriesStep1(result_id);
+	}else{
+		objectStep1(result_id);
 	}
-	function timeseriesStep1(){
-		location.href = '/sandbox/result/timeseriesAnalysis/step1';
-	}
-	function objectStep1(){
-		location.href = '/sandbox/result/objectDetection/step1';
-	}
+}
+
 </script>
 
 
