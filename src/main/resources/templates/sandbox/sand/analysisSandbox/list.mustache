@@ -165,6 +165,7 @@
 
 <script>
 
+document.title = "LX DT | 샌드박스 관리"; 
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/sand/analysisSandbox';
 
@@ -172,7 +173,6 @@ let fileNo = 0;
 let dataFiles = new Array();
 let contents;
 
-// document.title = "LX DT | 샌드박스 관리"; 
 let init_page = 1;				//초기 페이지
 let page = 1;					//페이지
 let init_size_per_page = 10;	//초기 개수
@@ -222,12 +222,12 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
 	                        insertTr += '  <td rowspan="2">'; 
-	                        insertTr += '    <button class="btn_play red" onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
-	                        insertTr += '    <button class="btn_pause" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
+	                        insertTr += '    <button class="btn_play red" id="play_'+el.sandbox_id+'" style="display:none;" onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
+	                        insertTr += '    <button class="btn_pause" id="pause_'+el.sandbox_id+'" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2">'; 
-	                        insertTr += '    <button class="btn_play" onclick=sandboxesAnalysisRun("'+el.sandbox_id+'");>▶</button>';
-	                        insertTr += '    <button class="btn_pause red" onclick=sandboxesAnalysisStop("'+el.sandbox_id+'");>■</button>';
+	                        insertTr += '    <button class="btn_play"  onclick=sandboxesAnalysisRun("'+el.sandbox_id+'");>▶</button>';
+	                        insertTr += '    <button class="btn_pause red"   onclick=sandboxesAnalysisStop("'+el.sandbox_id+'");>■</button>';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2"><span class="blue bold" style="cursor:pointer" onclick=resultPage("'+el.sandbox_id+'");>결과조회</span></td>';
 	                        if(el.anals_use_prpos_cd === 'B13002'){
@@ -254,6 +254,7 @@ const sandboxesGet = function(page, size_per_page){
 	  	    		paging(data.total_count, size_per_page, pageCount, page);		
 		  	  }
 	    	  
+		  	sandboxHealthCheck();
   	    	
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
@@ -291,7 +292,7 @@ const commonCodeSandboxLastStatus = function (){
 const sandboxesRun = function (sandbox_id) {
 		
 	const data = {
-   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/run',
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/run',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
     };		
@@ -304,7 +305,8 @@ const sandboxesRun = function (sandbox_id) {
     }).done(function (data) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
-  		sandboxesGet(page, size_per_page);
+  		
+  		$("#play_"+sandbox_id).hide();
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -314,7 +316,7 @@ const sandboxesRun = function (sandbox_id) {
 const sandboxesStop = function (sandbox_id) {
 		
 	const data = {
-   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/stop',
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/stop',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
     };		
@@ -327,7 +329,8 @@ const sandboxesStop = function (sandbox_id) {
     }).done(function (data) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
-  		sandboxesGet(page, size_per_page);
+  		
+//  		$("#pause_"+sandbox_id).hide();
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -337,7 +340,7 @@ const sandboxesStop = function (sandbox_id) {
 const sandboxesAnalysisRun = function (sandbox_id) {
 		
 	const data = {
-   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/run',
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/start',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
     };		
@@ -350,7 +353,7 @@ const sandboxesAnalysisRun = function (sandbox_id) {
     }).done(function (data) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
-  		sandboxesGet(page, size_per_page);
+  		
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -373,7 +376,7 @@ const sandboxesAnalysisStop = function (sandbox_id) {
     }).done(function (data) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
-  		sandboxesGet(page, size_per_page);
+  		
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -394,9 +397,12 @@ const sandboxHealthCheck = function () {
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
-  		let message = JSON.stringify(data.return_msg);
-  		alert(message.replace(/\"/gi, ''));
-  		sandboxesGet(page, size_per_page);
+    	if(data.contents != ""){
+	   		$.each(data.contents, function (idx, el) {
+	   			console.log('el : '+el);
+	   			$("#play_"+el).show(); 
+   	     	});
+    	}
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -633,8 +639,12 @@ const closeModal = function(modalId){
 
 //조회
 sandboxesGet(page, size_per_page);
-
 commonCodeSandboxLastStatus();
+
+//5초 마다 helth-check 호출
+setInterval(function () { 
+	sandboxHealthCheck(); 
+}, 5000);
 
 const resultPage = function(sandbox_id){
 	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;

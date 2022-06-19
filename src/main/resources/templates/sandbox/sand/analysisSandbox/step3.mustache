@@ -307,7 +307,7 @@
                       <div class="right_btns mt-4">
                         <button class="btn btn-warning" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
                         <button class="btn btn-danger" onclick="sandboxCreate();">생성 요청</button>
-                        <button class="btn btn-primary">목록</button>
+                        <button class="btn btn-primary" onclick="list();">목록</button>
                       </div>
                     </div>
                                       
@@ -324,7 +324,7 @@
 
 
 <script>
-
+document.title = "LX DT | 샌드박스 등록"; 
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/sand/analysisSandbox';
 let contents;
@@ -839,6 +839,11 @@ const sandboxEnrollStatus = function(){
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });	
+}
+
+//분석 시나리오 관리
+const list = function(){
+	location.href = '/sandbox/scenario/analysisScenario/list';
 }
 
 //샌드박스 설정
