@@ -618,9 +618,12 @@ const sandboxScenarioSettingUpdate = function(val){
             data: JSON.stringify(data)
         }).done(function (data) {
       		let message = JSON.stringify(data.return_msg);
-      		alert(message.replace(/\"/gi, ''));    	  
+      		alert(message.replace(/\"/gi, ''));    	
+      		
 	        if(val == 'B06002'){
 		        step3();   
+	        }else{
+	      		sandboxEnrollStatus();
 	        }
         }).fail(function (error) {
             alert(JSON.stringify(error));
@@ -723,4 +726,5 @@ const divShow = function(){
 divShow();
 commonCodeAnalysisScenarioSetting();
 sandboxEnrollStatus();
+
 </script>

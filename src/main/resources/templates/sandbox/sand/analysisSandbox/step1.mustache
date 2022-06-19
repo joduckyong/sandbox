@@ -436,9 +436,8 @@ const sandboxSettingEnroll = function (val) {
 	  		alert(message.replace(/\"/gi, ''));    	    
 	  		sandboxId = data.contents.sandbox_id;
 	  		analsUsePrposCd = data.contents.anals_use_prpos_cd;
-	  		if(val == 'B06002'){
-		  		step2();
-	  		}
+	  		
+	  		sandboxEnrollStatus();
 	  		
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
@@ -686,6 +685,6 @@ const list = function(){
 
 commonCodeAnalysisUsePurpose();
 sandboxServerIpGet();
-sandboxEnrollStatus();
+progressBar();
 
 </script>

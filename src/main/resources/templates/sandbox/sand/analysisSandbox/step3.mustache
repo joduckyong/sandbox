@@ -298,7 +298,7 @@
                                   <th>선택[개]</th>
                                 </tr>
                               </thead>
-                              <tbody id="sandboxImageDatasetGet"> 
+                              <tbody id="sandboxAnalysisImageDatasetGet"> 
                               </tbody>
                             </table>
                           </div>
@@ -495,53 +495,67 @@ const commonCodeImagesDatasetsCode = function(){
         });		
 }
 
-//분석 방식 선택 - 이미지 분석 데이터셋 정보 조회
-const sandboxImageDatasetGet = function(){
 
+//샌드박스 분석방식 상세조회
+const sandboxAnalysisMethodDetail = function(){
 	const data = {
-       		url: '/services/sandbox/sandboxes/1/scenarios/image-datasets/get',
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/detail',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	            		
         };		
         $.ajax({
             type: 'POST',
-            url: url+'/sandboxImageDatasetGet',
+            url: url+'/sandboxAnalysisMethodDetail',
             dataType: 'json',
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
  		  	   	if(data.contents != ""){    	    
-	 		  	   	contents = data.contents;
-					$("#sandboxImageDatasetGet").empty();
-	     	        let insertTr = '';
 			  	    $.each(data.contents, function (idx, el) {
-		                  insertTr += '<tr>';
-		                  insertTr += ' <td class="first" style="text-align: center;">'+el.image_dataset_nm+'</td>';
-		                  insertTr += ' <td style="text-align: center;">학습 데이터*</td>';
-		                  insertTr += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17001_'+el.image_dataset_id+'" name="file_cnt" id="" value="" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
-		                  insertTr += '</tr>';
-		                  insertTr += '<tr>';
-		                  insertTr += ' <td class="first" style="text-align: center;">'+el.image_dataset_nm+'</td>';
-		                  insertTr += ' <td style="text-align: center;">검증 데이터*</td>';
-		                  insertTr += ' <td style="text-align: center;">'+el.valid_cnt+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17002_'+el.image_dataset_id+'" name="file_cnt" id="" value="" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
-		                  insertTr += '</tr>';
-		                  insertTr += '<tr>';
-		                  insertTr += ' <td class="first" style="text-align: center;">'+el.image_dataset_nm+'</td>';
-		                  insertTr += ' <td style="text-align: center;">테스트 데이터*</td>';
-		                  insertTr += ' <td style="text-align: center;">'+el.test_cnt+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17003_'+el.image_dataset_id+'" name="file_cnt" id="" value="" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
-		                  insertTr += '</tr>';
 				    });     	
-          	   	    $("#sandboxImageDatasetGet").append(insertTr);
  		  	   	}
  		  	   	
  		  	}
         }).fail(function (error) {
             alert(JSON.stringify(error));
-        });		
+        });	
+}
+
+//샌드박스 분석방식 상세조회 - 학습 데이터 개수 조회
+const sandboxAnalysisImageDatasetGet = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/analysis-images/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	            		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxAnalysisImageDatasetGet',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    
+					$("#sandboxAnalysisImageDatasetGet").empty();
+	     	        let insertTr = '';
+			  	    $.each(data.contents, function (idx, el) {
+		                  insertTr += '<tr>';
+		                  insertTr += ' <td class="first" style="text-align: center;">'+el.anals_target_image_dataset_id+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
+		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17001_'+el.anals_target_image_dataset_id+'" name="file_cnt" id="" value="" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
+		                  insertTr += '</tr>';
+		                  insertTr += '<tr>';
+				    });     	
+          	   	    $("#sandboxAnalysisImageDatasetGet").append(insertTr);
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
 }
 
 //분석 방식 선택 임시저장 & 저장 & 수정
@@ -851,7 +865,7 @@ const initMain = function(){
 	$("#div_B09002").hide();	
 	
 	if('{{anals_use_prpos_cd}}' == 'B13002'){
-		sandboxImageDatasetGet();
+		sandboxAnalysisImageDatasetGet();
 	}
 }
 

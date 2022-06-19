@@ -615,6 +615,7 @@ const enterkey = function(e) {
 const fileCheck = function(id){
 	$('#file_'+id).trigger("click");
     $.each(contents, function (idx, el) {
+    	console.log('anals_data_sect_cd : '+el.anals_data_sect_cd);
     	$('#btn_'+el.anals_data_sect_cd).attr("disabled",true); 
  	});	
     $('#btn_'+id).removeAttr('disabled'); 
