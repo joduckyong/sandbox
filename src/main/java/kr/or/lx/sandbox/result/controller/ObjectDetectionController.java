@@ -51,26 +51,6 @@ public class ObjectDetectionController {
 		return "sandbox/result/objectDetection/"+step;
 	}
 	
-	@GetMapping("/display/{filename}")
-	public ResponseEntity<Resource> display(@PathVariable String filename, ModelMap model) throws Exception{
-		
-		String path = "C:\\lx-test\\pretreat-sample\\";
-		String fileName = path+filename;
-		FileSystemResource resource = new FileSystemResource(fileName);
-		
-		HttpHeaders header = new HttpHeaders();
-		Path filePath = null;
-		
-		try {
-			filePath = Paths.get(fileName);
-			header.add("Content-Type", Files.probeContentType(filePath));
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		
-		return new ResponseEntity<Resource>(header, HttpStatus.OK);
-	}
-	
 	/**
      * 데이터 분석 결과 API
      * @return

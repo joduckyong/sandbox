@@ -85,7 +85,7 @@
         </div>
 
         <div class="modal fade preview" id="preview" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-lg" style="max-width: 400px;">
+          <div class="modal-dialog modal-lg" >
             <div class="modal-content">
               <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel"></h4>
@@ -212,9 +212,10 @@ const sandboxResultsDataPretreat = function(){
 const preview = function(pretreat_step_nm, sample_data_file_path){
 	
 	$("#pretreat_step_nm").text(pretreat_step_nm);
-	$("#sample_data_file_path").html("<img src="+sample_data_file_path+">");
-	
+	let replaced_sample_data_file_path = sample_data_file_path.replace('C:/lx-test', '/upload');
+	$("#sample_data_file_path").html("<img src="+replaced_sample_data_file_path+" width=100% height=100%>");
 	$('#preview').modal('show');
+	
 }
 
 

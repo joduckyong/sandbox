@@ -1,5 +1,23 @@
 {{>layout/header}}
 
+		<style>
+			.swiper-container {
+				height:420px;
+				border:5px solid silver;
+			}
+			.swiper-slide {
+				text-align:center;
+				display:flex; /* 내용을 중앙정렬 하기위해 flex 사용 */
+				align-items:center; /* 위아래 기준 중앙정렬 */
+				justify-content:center; /* 좌우 기준 중앙정렬 */
+			}
+			.swiper-slide img {
+				box-shadow:0 0 5px #555;
+				max-width:100%; /* 이미지 최대너비를 제한, 슬라이드에 이미지가 여러개가 보여질때 필요 */
+				/* 이 예제에서 필요해서 설정했습니다. 상황에따라 다를 수 있습니다. */
+			}
+		</style>
+
         <div class="right_col" role="main">
           <div class="row">
             <div class="col-md-12">
@@ -40,26 +58,19 @@
                             </table>
                           </div>
                         </div>
-                        <div class="col-12 col-md-4 mx-0">
-	                      <h4 class="center_title">분석</h4>
-                          <canvas id="lineChart1"></canvas>
-                          <div class="right_btns">
-	                        <button class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-chevron-left"></i>
-	                        </button>
-	                       </div>
-                        </div>
-                        <div class="col-12 col-md-4 mx-0">
-                      	  <h4 class="center_title">결과</h4>
-                          <canvas id="lineChart2"></canvas>
-                          <div class="left_btns">
-	                        <button class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-chevron-right"></i>
-	                        </button>
-	                       </div>
+                        <div class="col-12 col-md-8 mx-0">
+	                      <h4 class="center_title">분석 결과</h4>
+	                      <div class="swiper-container">
+							<div class="swiper-wrapper" id="div_slider">
+							</div>
+	                      	<div class="swiper-button-next"></div><!-- 다음 버튼 (오른쪽에 있는 버튼) -->
+							<div class="swiper-button-prev"></div><!-- 이전 버튼 -->
+							<div class="swiper-pagination"></div><!-- 페이징 -->
                         </div>
                       </div>
-                      <div class="right_btns mt-4">
-                        <button class="btn btn-primary" onclick="result();">완료</button>
-                      </div>
+                    </div>
+                    <div class="right_btns mt-4">
+                      <button class="btn btn-primary" onclick="result();">완료</button>
                     </div>
                   </div>
                 </div>
@@ -71,9 +82,35 @@
 {{>layout/footer}}        
 
 <script>
+
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/result/objectDetection';
 
+//슬라이드
+const swiperInit = function(){
+	
+	new Swiper('.swiper-container', {
+
+		slidesPerView : 2, // 동시에 보여줄 슬라이드 갯수
+		spaceBetween : 30, // 슬라이드간 간격
+		slidesPerGroup : 2, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+
+		// 그룹수가 맞지 않을 경우 빈칸으로 메우기
+		// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+		loopFillGroupWithBlank : true,
+
+		loop : true, // 무한 반복
+
+		pagination : { // 페이징
+			el : '.swiper-pagination',
+			clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+		},
+		navigation : { // 네비게이션
+			nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+			prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+		},
+	});	
+}
 //샌드박스 결과 조회
 const sandboxResultsAnalysisResult = function(){
 	
@@ -89,15 +126,36 @@ const sandboxResultsAnalysisResult = function(){
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
-	    	  $("#sandboxResultsAnalysisResult").empty();
+	    	  $("#div_slider").empty();
 		  	  if (data != null) {
 		  	    	if(data.contents != ""){
-			    	    let insertTr = '';
+			    	    let insertDiv1 = '';
+			    	    let insertDiv2 = '';
+			    	    let insertDiv3 = '';
 		     	        
-				  	    $.each(data.contents, function (idx, el) {
+			    	    var array1 = new Array();
+			    	    var array2 = new Array();
+			    	    let origin_file_path = data.contents.contents.origin_file_path;
+			    	    origin_file_path = origin_file_path.replace('C:/lx-test', '/upload');
+			    	    
+			    	    let result_file_path = data.contents.contents.result_file_path;
+			    	    result_file_path = result_file_path.replace('C:/lx-test', '/upload');
+			    	    
+				  	    $.each(data.contents.contents.origin_file_list, function (idx, el) {
+				  	    	insertDiv1 = '<div class="swiper-slide"><img src='+origin_file_path+el.file_nm+' ></div>';
+				  	    	array1.push(insertDiv1);
+				  	    });
+			  	    	
+				  	    $.each(data.contents.contents.result_file_list, function (idx, el) {
+				  	    	insertDiv2 = '<div class="swiper-slide"><img src='+result_file_path+el.file_nm+' ></div>';
+				  	    	array2.push(insertDiv2);
 				  	    });
 				  	    
-	         	   	    $("#sandboxResultsAnalysisResult").append(insertTr);
+					  	for (var i = 0; i < array1.length; i++) {
+					  		insertDiv3 += array1[i] + array2[i];
+					  	}
+	         	   	    $("#div_slider").append(insertDiv3);
+					  	
 		  	    	}
 		  	  }
 	    	  
@@ -106,9 +164,14 @@ const sandboxResultsAnalysisResult = function(){
 	    });		
 }
 
+
 //조회
 sandboxResultsAnalysisResult();
 
+setTimeout(function() {
+	  swiperInit();
+}, 100);
+	
 const step1 = function(){
 	location.href = url+'/step1/{{sandbox_id}}/{{result_id}}';
 }
@@ -127,6 +190,7 @@ const step5 = function(){
 const result = function(){
 	location.href = '/sandbox/sand/analysisSandbox/list';
 }
+
 </script>
 
 
