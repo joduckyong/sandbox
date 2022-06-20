@@ -30,8 +30,8 @@
                   </div>
                   	              
                   <div class="table_btns mt-4">
-                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target=".addport_modal" onclick="jsNext();">등록</button>
-                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target=".addport_modal">수정</button>
+                    <button class="btn btn-primary" type="button" onclick="btnAdd();">등록</button>
+                    <button class="btn btn-primary" type="button" onclick="btnUpdate();">수정</button>
                     <button class="btn btn-danger btn_remove" onclick="btnDel();">삭제</button>
                   </div>
                   
@@ -215,7 +215,7 @@ const sandboxesGet = function(page, size_per_page){
 				  	    	
 	                        insertTr += '<tr>';
 	                        insertTr += '  <td rowspan="2">';
-	                        insertTr += '    <input class="flat" type="radio" name="table_records" name="sandbox_id" value="'+el.sandbox_id+'">';
+	                        insertTr += '    <input class="flat" type="radio" name="radio_sandbox_id" value="'+el.sandbox_id+'">';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" >'+isEmpty(el.sandbox_nm)+'</span></td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.scenario_nm_kor)+'</td>';
@@ -595,12 +595,12 @@ const btnDel = function(){
 	
     if(!confirm('삭제 하시겠습니까?')) {
     } else {
-        if($("input[name='sandbox_id']:checked").length < 1) {
+        if($("input[name='radio_sandbox_id']:checked").length < 1) {
             alert('선택 항목이 없습니다.');
             return;
         }
 
-        $("input[name='sandbox_id']:checked").each(function (i) {
+        $("input[name='radio_sandbox_id']:checked").each(function (i) {
         	sandboxDelete($(this).val());
         });
     }
@@ -650,7 +650,19 @@ const resultPage = function(sandbox_id){
 	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;
 }
 
-const jsNext = function(){
+const btnAdd = function(){
 	location.href = '/sandbox/sand/analysisSandbox/step1';
+}
+
+const btnUpdate = function(){
+	
+	let sandbox_id = $("input[name='radio_sandbox_id']:checked").val();
+	
+     if($("input[name='radio_sandbox_id']:checked").length < 1) {
+        alert('선택 항목이 없습니다.');
+        return;
+    }
+    
+	location.href = '/sandbox/sand/analysisSandbox/update_step1/'+sandbox_id;
 }
 </script>

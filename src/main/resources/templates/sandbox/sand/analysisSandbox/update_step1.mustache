@@ -33,6 +33,11 @@
                           </div>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col-12 col-md-2 mx-0">
+	                      <h3 class="mb-4">샌드박스 상태</h3>
+                         </div>
+                      </div>
                       <h3 class="mb-4">샌드박스 기본 구성</h3>
                       <div class="row">
                         <div class="col-12 col-md-6 mx-0">
@@ -595,7 +600,7 @@ const progressBar = function(){
 //샌드박스 단계별 등록 상태
 const sandboxEnrollStatus = function(){
 	const data = {
-       		url: '/services/sandbox/sandboxes/'+sandboxId+'/enroll-status',
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/enroll-status',
        		user_id: 'user00',	
        		menu_id: 'menu_id',
        	};		
@@ -686,6 +691,6 @@ const list = function(){
 
 commonCodeAnalysisUsePurpose();
 sandboxServerIpGet();
-progressBar();
+sandboxEnrollStatus();
 
 </script>

@@ -158,10 +158,11 @@ public class AnalysisSandboxController {
 	 * 샌드박스 수정
 	 * @return
 	 */
-	@GetMapping("/update_step1")
-	public String analysisSandboxUpdateStep1(ModelMap model) throws Exception{
+	@GetMapping("/update_step1/{sandbox_id}")
+	public String analysisSandboxUpdateStep1(@PathVariable String sandbox_id, ModelMap model) throws Exception{
 		log.info("analysisSandboxUpdateStep1");
 		
+		model.put("sandbox_id", sandbox_id);
 		return "sandbox/sand/analysisSandbox/update_step1";
 	}
 	
