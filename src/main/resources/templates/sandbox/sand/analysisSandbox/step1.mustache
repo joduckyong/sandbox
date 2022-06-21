@@ -437,7 +437,11 @@ const sandboxSettingEnroll = function (val) {
 	  		sandboxId = data.contents.sandbox_id;
 	  		analsUsePrposCd = data.contents.anals_use_prpos_cd;
 	  		
-	  		sandboxEnrollStatus();
+	  		if(val == 'B06002'){
+	  			step2();
+	  		}else{
+		  		sandboxEnrollStatus();
+	  		}
 	  		
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
@@ -457,8 +461,8 @@ const sandboxSettingUpdate = function (val) {
 	let sandbox_desc = $("#sandbox_desc").val();
 	let sandboxServerIpGet = $("#sandboxServerIpGet").val();
 	
-	if(sandboxId == ''){
-		alert("임시저장을 해주세요!");
+	if(isEmpty(sandboxId) == ''){
+		sandboxSettingEnroll(val);
 		return;
 	}
 	
@@ -681,7 +685,7 @@ const step3 = function(){
 }
 //분석 시나리오 관리
 const list = function(){
-	location.href = '/sandbox/scenario/analysisScenario/list';
+	location.href = url+'/list';
 }
 
 commonCodeAnalysisUsePurpose();

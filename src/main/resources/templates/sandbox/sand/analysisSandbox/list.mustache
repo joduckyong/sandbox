@@ -222,8 +222,8 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
 	                        insertTr += '  <td rowspan="2">'; 
-	                        insertTr += '    <button class="btn_play red" id="play_'+el.sandbox_id+'" style="display:none;" onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
-	                        insertTr += '    <button class="btn_pause" id="pause_'+el.sandbox_id+'" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
+	                        insertTr += '    <button class="btn_play" id="play_'+el.sandbox_id+'"  onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
+	                        insertTr += '    <button class="btn_pause red" id="pause_'+el.sandbox_id+'" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
 	                        insertTr += '  </td>';
 	                        insertTr += '  <td rowspan="2">'; 
 	                        insertTr += '    <button class="btn_play"  onclick=sandboxesAnalysisRun("'+el.sandbox_id+'");>▶</button>';
@@ -306,7 +306,7 @@ const sandboxesRun = function (sandbox_id) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
   		
-  		$("#play_"+sandbox_id).hide();
+  		//$('a').attr('onclick', '');
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -330,7 +330,7 @@ const sandboxesStop = function (sandbox_id) {
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
   		
-//  		$("#pause_"+sandbox_id).hide();
+//  	$('a').attr('onclick', '');
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
@@ -400,8 +400,10 @@ const sandboxHealthCheck = function () {
     	if(data.contents != ""){
 	   		$.each(data.contents, function (idx, el) {
 	   			console.log('el : '+el);
-	   			$("#play_"+el).show(); 
+	   			$("#play_"+el).addClass("red"); 
+	   			$("#pause_"+el).removeClass("red"); 
    	     	});
+	   		
     	}
     }).fail(function (error) {
         alert(JSON.stringify(error));
@@ -476,7 +478,7 @@ const sandboxImageDatasetInfoGet = function(sandbox_id){
 	                        insertTr += '  <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
 	                        insertTr += '  <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
 	                        insertTr += '  <td style="text-align: center;">'+el.file_cnt+'</td>';
-	                        insertTr += '  <td style="text-align: center;"><button id="btn_'+el.anals_data_sect_cd+'" class="btn btn-sm btn-primary" onclick=fileCheck("'+el.anals_data_sect_cd+'");>파일 업로드</button><input type="file" id="file_'+el.anals_data_sect_cd+'" onchange=addFile(this,"'+el.anals_data_sect_cd+'","'+sandbox_id+'","'+el.image_dataset_id+'"); multiple style="display:none;"></td>';
+	                        insertTr += '  <td style="text-align: center;"><button id="btn_'+el.anals_data_sect_cd+el.image_dataset_id+'" class="btn btn-sm btn-primary" onclick=fileCheck("'+el.anals_data_sect_cd+el.image_dataset_id+'","'+el.anals_data_sect_cd+'","'+sandbox_id+'","'+el.image_dataset_id+'");>파일 업로드</button><input type="file" id="file_'+el.anals_data_sect_cd+el.image_dataset_id+'" onchange=addFile(this); multiple style="display:none;"></td>';
 	                        insertTr += '</tr>';
 	                        
 				  	    });
@@ -549,7 +551,7 @@ const sandboxAnalysisDataUpload = function() {
 }
 
 //첨부파일 추가
-const addFile = function(obj, dtl_code, sandbox_id, image_dataset_id){
+const addFile = function(obj){
 
     for (const file of obj.files) {
         // 파일 배열에 담기
@@ -562,9 +564,6 @@ const addFile = function(obj, dtl_code, sandbox_id, image_dataset_id){
         fileNo++;
 	}	
     
-    $('#dtl_code').val(dtl_code);
-    $('#sandbox_id').val(sandbox_id);
-    $('#image_dataset_id').val(image_dataset_id);
 }
 
 //샌드박스 삭제
@@ -618,13 +617,17 @@ const enterkey = function(e) {
     }
 }
 
-const fileCheck = function(id){
+const fileCheck = function(id, dtl_code, sandbox_id, image_dataset_id){
 	$('#file_'+id).trigger("click");
     $.each(contents, function (idx, el) {
     	console.log('anals_data_sect_cd : '+el.anals_data_sect_cd);
-    	$('#btn_'+el.anals_data_sect_cd).attr("disabled",true); 
+    	$('#btn_'+el.anals_data_sect_cd+el.image_dataset_id).attr("disabled",true); 
  	});	
     $('#btn_'+id).removeAttr('disabled'); 
+    
+    $('#dtl_code').val(dtl_code);
+    $('#sandbox_id').val(sandbox_id);
+    $('#image_dataset_id').val(image_dataset_id);    
 }
 
 //모달 열기
