@@ -337,10 +337,10 @@ const sandboxAnalysisImageDatasetGet = function(){
 	     	        let insertTr = '';
 			  	    $.each(data.contents, function (idx, el) {
 		                  insertTr += '<tr>';
-		                  insertTr += ' <td class="first" style="text-align: center;">'+el.anals_target_image_dataset_id+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
 		                  insertTr += ' <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
-		                  insertTr += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17001_'+el.anals_target_image_dataset_id+'" name="file_cnt" id="" value="" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.total_cnt+'</td>';
+		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17001_'+el.anals_target_image_dataset_id+'" name="file_cnt" id="" value="'+el.file_cnt+'" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
 		                  insertTr += '</tr>';
 		                  insertTr += '<tr>';
 				    });     	
