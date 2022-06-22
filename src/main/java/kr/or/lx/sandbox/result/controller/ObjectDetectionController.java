@@ -35,6 +35,12 @@ public class ObjectDetectionController {
     @Value("${sandbox.api.url}")
     private String sandboxApiUrl;	
     
+    @Value("${resource.path}")
+    private String resourcePath;	
+    
+    @Value("${upload.path}")
+    private String uploadPath;	
+    
 	@Autowired
 	private ApiService<?> apiService;
 	
@@ -46,6 +52,8 @@ public class ObjectDetectionController {
 	public String objectDetectionStep(@PathVariable String step, @PathVariable String sandbox_id, @PathVariable String result_id, ModelMap model) throws Exception{
 		log.info("objectDetectionStep");
 		
+		model.put("resourcePath", resourcePath.replace("file:///", ""));		
+		model.put("uploadPath", uploadPath.replace("**", ""));	
 		model.put("sandbox_id", sandbox_id);	
 		model.put("result_id", result_id);	
 		return "sandbox/result/objectDetection/"+step;

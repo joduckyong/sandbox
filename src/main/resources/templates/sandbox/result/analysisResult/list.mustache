@@ -318,8 +318,13 @@ const sandboxResultsGet = function(){
 		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.test_data_cnt)+'</td>';
 		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.analysis_data_cnt)+'</td>';
 		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.model_accuracy)+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><a class="btn btn-primary" href="" data-toggle="modal" data-target=".download_modal">다운로드 </a></td>';
-		                  insertTr += ' <td style="text-align: center;cursor:pointer" onclick=result("object","'+isEmpty(el.result_id)+'")>결과조회</td>';
+		                  if(el.analysis_complete_yn == 'Y'){
+			                  insertTr += ' <td style="text-align: center;"><a class="btn btn-primary" href="" data-toggle="modal" data-target=".download_modal">다운로드 </a></td>';
+			                  insertTr += ' <td style="text-align: center;cursor:pointer" onclick=result("object","'+isEmpty(el.result_id)+'")>결과조회</td>';
+		                  }else{
+			                  insertTr += ' <td style="text-align: center;"></td>';
+			                  insertTr += ' <td style="text-align: center;"></td>';
+		                  }
 		                  insertTr += '</tr>';
 		                  insertTr += '<tr>';
 				    });     	
