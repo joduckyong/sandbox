@@ -212,7 +212,7 @@ const sandboxResultsDataPretreat = function(){
 const preview = function(pretreat_step_nm, sample_data_file_path){
 	
 	$("#pretreat_step_nm").text(pretreat_step_nm);
-	let replaced_sample_data_file_path = sample_data_file_path.replace('C:/lx-test', '/upload');
+	let replaced_sample_data_file_path = sample_data_file_path.replace('{{resourcePath}}', '{{uploadPath}}');
 	$("#sample_data_file_path").html("<img src="+replaced_sample_data_file_path+" width=100% height=100%>");
 	$('#preview').modal('show');
 	

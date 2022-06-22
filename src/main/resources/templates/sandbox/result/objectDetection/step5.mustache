@@ -136,10 +136,10 @@ const sandboxResultsAnalysisResult = function(){
 			    	    var array1 = new Array();
 			    	    var array2 = new Array();
 			    	    let origin_file_path = data.contents.contents.origin_file_path;
-			    	    origin_file_path = origin_file_path.replace('C:/lx-test', '/upload');
+			    	    origin_file_path = origin_file_path.replace('{{resourcePath}}', '{{uploadPath}}');
 			    	    
 			    	    let result_file_path = data.contents.contents.result_file_path;
-			    	    result_file_path = result_file_path.replace('C:/lx-test', '/upload');
+			    	    result_file_path = result_file_path.replace('{{resourcePath}}', '{{uploadPath}}');
 			    	    
 				  	    $.each(data.contents.contents.origin_file_list, function (idx, el) {
 				  	    	insertDiv1 = '<div class="swiper-slide"><img src='+origin_file_path+el.file_nm+' ></div>';
