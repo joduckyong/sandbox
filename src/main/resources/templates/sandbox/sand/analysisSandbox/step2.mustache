@@ -209,7 +209,7 @@
                       <div class="right_btns mt-4">
                         <button class="btn btn-warning" onclick="sandboxScenarioSettingUpdate('B06001');">임시저장</button>
                         <button class="btn btn-success" onclick="sandboxScenarioSettingUpdate('B06002');">다음</button>
-                        <button class="btn btn-primary">목록</button>
+                        <button class="btn btn-primary" onclick="list();">목록</button>
                       </div>
                     </div>
                     
@@ -598,7 +598,7 @@ const sandboxScenarioSettingUpdate = function(val){
 	} 
 	
 	const data = {
-       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/detail',
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/update',
        		scenario_id: scenario_id,	
        		anals_kind_cd: commonCodeAnalysisScenarioSetting,	
        		scenario_setup_status_cd: val,	

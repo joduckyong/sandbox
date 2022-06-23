@@ -274,10 +274,13 @@
                           </div>
                         </div>
                       </div>
-                      <div class="right_btns mt-4">
-                        <button class="btn btn-warning" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
-                        <button class="btn btn-danger" onclick="sandboxCreate();">생성 요청</button>
-                        <button class="btn btn-primary" onclick="list();">목록</button>
+                      <div class="right_btns mt-6">
+                        <button class="btn btn-primary" id="btn_B06001_1" style="display:none;" onclick="sandboxCreate();">승인</button>
+                        <button class="btn btn-danger" id="btn_B06001_2" style="display:none;" >반려</button>                      
+                        <button class="btn btn-warning" id="btn_B06001" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
+                        <button class="btn btn-primary" id="btn_B06002" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06002');">등록</button>
+                        <button class="btn btn-danger" onclick="sandboxDelete();">삭제</button>
+                        <button class="btn btn-primary" id="" onclick="list();">목록</button>
                       </div>
                     </div>
                                       
@@ -289,6 +292,8 @@
 		<input type="hidden" name="sandbox_setup_status_cd" id="sandbox_setup_status_cd"/>
 	    <input type="hidden" name="scenario_setup_status_cd" id="scenario_setup_status_cd"/>
 	    <input type="hidden" name="anals_method_status_cd" id="anals_method_status_cd"/>
+	    <input type="hidden" name="last_status_cd" id="last_status_cd"/>
+	    <input type="hidden" name="sandbox_status_cd" id="sandbox_status_cd"/>
 	    
 {{>layout/footer}}        
 
@@ -620,6 +625,29 @@ const sandboxCreate = function(){
 	}
 }
 
+//샌드박스 삭제
+const sandboxDelete = function () {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxDelete',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		list();
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //div 초기화
 const div_main = function(){
 	
@@ -700,6 +728,8 @@ const progressBar = function(){
 	let sandbox_setup_status_cd = $("#sandbox_setup_status_cd").val();
 	let scenario_setup_status_cd = $("#scenario_setup_status_cd").val();
 	let anals_method_status_cd = $("#anals_method_status_cd").val();
+	let last_status_cd = $("#last_status_cd").val();
+	let sandbox_status_cd = $("#sandbox_status_cd").val();
 	
 	if(sandbox_setup_status_cd == progressCd1){
 		$("#ps1").addClass("temporary_storage");
@@ -718,6 +748,21 @@ const progressBar = function(){
 	}else{
 		$("#ps3").addClass("now_depth");
 	}
+	
+	//반려
+	if(last_status_cd == 'B06001' && sandbox_status_cd == 'B07002'){
+		$("#btn_B06001_2").show();
+	}
+	//승인
+	if((last_status_cd == 'B06001' && sandbox_status_cd == 'B07002') || (last_status_cd == 'B06001' && sandbox_status_cd == 'B07006')){
+		$("#btn_B06001_1").show();
+	}
+	//임시저장, 등록
+	if(sandbox_status_cd != 'B07005'){
+		$("#btn_B06001").show();
+		$("#btn_B06002").show();
+	}
+	
 }
 
 //샌드박스 단계별 등록 상태
@@ -739,7 +784,8 @@ const sandboxEnrollStatus = function(){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);
    	    		$("#scenario_setup_status_cd").val(data.contents.scenario_setup_status_cd);
    	    		$("#anals_method_status_cd").val(data.contents.anals_method_status_cd);
-   	    		
+   	    		$("#last_status_cd").val(data.contents.last_status_cd);
+   	    		$("#sandbox_status_cd").val(data.contents.sandbox_status_cd);   	    		
    	    		progressBar();
    	    	}
    	    	

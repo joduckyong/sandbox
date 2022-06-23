@@ -35,7 +35,7 @@
                       </div>
                       <div class="row">
                         <div class="col-12 col-md-2 mx-0">
-	                      <h3 class="mb-4">샌드박스 상태</h3>
+	                      <h3 class="mb-4">샌드박스 상태 : <span class="blue bold" id="sandbox_status"></span></h3>
                          </div>
                       </div>
                       <h3 class="mb-4">샌드박스 기본 구성</h3>
@@ -110,7 +110,7 @@
                         </div>
                       </div>
                       <div class="right_btns mt-4">
-                        <button class="btn btn-warning" onclick="sandboxSettingEnroll('B06001');">임시저장</button>
+                        <button class="btn btn-warning" onclick="sandboxSettingUpdate('B06001');">임시저장</button>
                         <button class="btn btn-success" onclick="sandboxSettingUpdate('B06002');">다음</button>
                         <button class="btn btn-primary" onclick="list();">목록</button>
                       </div>
@@ -175,14 +175,13 @@ const commonUrl = '/sandbox/common';
 const url = '/sandbox/sand/analysisSandbox';
 
 let contents;
-let sandboxId;
 let analsUsePrposCd;
 
 const progressCd1 = 'B06001';	//등록 중
 const progressCd2 = 'B06002';	//등록 완료
 
 //샌드박스 설정 - 이미지 조회
-const sandboxAnalysisImagesGet = function(){
+const sandboxAnalysisImagesGet = function(image_id){
 	
 	let anals_use_prpos_cd = $("#anals_use_prpos_cd").val() != null ? $("#anals_use_prpos_cd").val() : '';
 	
@@ -208,7 +207,11 @@ const sandboxAnalysisImagesGet = function(){
 			    	    let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
 			     	          insertTr += '<tr>';
-			                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="image_id" onclick=sandboxImagesProgramsGet("'+el.image_id+'","'+el.docker_image_id+'"); value="'+el.image_id+'"></td>';
+			     	          if(image_id === el.image_id){
+				                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="image_id" id="image_id_'+el.image_id+'" onclick=sandboxImagesProgramsGet("'+el.image_id+'","'+el.docker_image_id+'"); value="'+el.image_id+'" checked></td>';
+			     	          }else{
+				                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="image_id" id="image_id_'+el.image_id+'" onclick=sandboxImagesProgramsGet("'+el.image_id+'","'+el.docker_image_id+'"); value="'+el.image_id+'"></td>';
+			     	          }
 			                  insertTr += ' <td style="text-align: center;">'+el.image_nm+'</td>';
 			                  insertTr += ' <td style="text-align: center;">'+(el.docker_image_nm == null ? '':el.docker_image_nm)+'</td>';
 			                  insertTr += ' <td style="text-align: center;"><span id="anals_use_prpos_cd_nm_'+el.image_id+'">'+el.anals_use_prpos_cd_nm+'<span></td>';
@@ -360,8 +363,54 @@ const commonCodeAnalysisUsePurpose = function (){
         });		
 }
 
-//샌드박스 등록
-const sandboxSettingEnroll = function (val) {
+//샌드박스 설정 - 샌드박스 설정 상세조회
+const sandboxSettingDetail = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/sandbox-setting/detail',
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxNameDupCheck',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+
+         	if(data.contents != ""){
+         		
+         		$("#sandbox_nm").val(data.contents.sandbox_nm);     
+         		
+         		$("#anals_use_prpos_cd").val(data.contents.anals_use_prpos_cd);        	
+         		$("#sandbox_status").text(data.contents.sandbox_status);        	
+         		$("#sandbox_desc").val(data.contents.sandbox_desc);        	
+         		sandboxAnalysisImagesGet(data.contents.image_id);
+         		$("#sandboxServerIpGet").val(data.contents.server_id);       
+         		
+  	    		contents = data.contents.programs;
+	     	    let insertTr = '';
+		  	    $.each(data.contents.programs, function (idx, el) {
+	     	          insertTr += '<tr>';
+	                  insertTr += ' <td style="text-align: center;"><input type="hidden" name="progrm_seq_num" value="'+el.progrm_seq_num+'">'+el.progrm_nm+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+el.version+'</td>';
+	                  if(el.port_use_yn == 'Y'){
+		                  insertTr += ' <td class="duplicate_box"><input type="hidden" name="bass_port" value="'+(el.bass_port == null ? '':el.bass_port)+'"><input type="text" name="port_num" id="port_num_'+el.progrm_seq_num+'" value="'+(el.port_num == null ? '':el.port_num)+'" readonly><button class="btn btn-sm btn-primary" onclick=addModal("'+el.progrm_seq_num+'");>포트선택</button></td>';
+	                  }else{
+		                  insertTr += ' <td class="duplicate_box"><input type="hidden" name="bass_port" value="'+(el.bass_port == null ? '':el.bass_port)+'"><input type="text" name="port_num" id="port_num_'+el.progrm_seq_num+'" value="'+(el.port_num == null ? '':el.port_num)+'" readonly></td>';
+	                  }
+	                  insertTr += '</tr>';
+		  	    });
+     	   	    $("#sandboxImagesProgramsGet").append(insertTr);
+         	}
+         	
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//샌드박스 설정 수정
+const sandboxSettingUpdate = function (val) {
 		
 	let confirmMsg = '';
 	if(val == 'B06001'){	//임시 저장
@@ -381,96 +430,6 @@ const sandboxSettingEnroll = function (val) {
         alert('선택 항목이 없습니다.');
         return;
     }
-    
-	if(sandbox_nm == ''){
-		alert("샌드박스 영문명을 입력해주세요!");
-		$("#sandbox_nm").focus();
-		return;
-	}    
-	if(idcheck == '0'){
-		alert("중복 확인을 해주세요!");
-		$("#sandbox_nm").focus();
-		return;
-	}     
-	if(sandbox_desc == ''){
-		alert("샌드박스 설명을 입력해주세요!");
-		$("#sandbox_desc").focus();
-		return;
-	}    
-    
-	if(sandboxServerIpGet == ''){
-		alert("IP를 선택하세요");
-		return;
-	}
-	
-	let program_list = new Array();
-    $.each(contents, function (idx, el) {
-		let data = new Object();
-		data.progrm_seq_num = el.progrm_seq_num;
-		data.port_num = $("#port_num_"+el.progrm_seq_num).val();
-		data.bass_port = (el.bass_port == null ? '':el.bass_port);
-		program_list.push(data);
-    });
-    
-	const data = {
-   		url: '/services/sandbox/sandboxes/sandbox-setting/enroll',
-   		user_id: 'user00',	
-   		menu_id: 'menu_id',
-   		image_id: image_id,
-   		docker_image_id: docker_image_id,
-   		sandbox_nm: sandbox_nm,
-   		sandbox_desc: sandbox_desc,
-   		sandbox_setup_status_cd: val,
-   		creator_id: 'creator_id',
-   		modifier_id: 'modifier_id',
-   		server_id: sandboxServerIpGet,
-   		program_ports: program_list,
-    };		
-	
-	console.log(JSON.stringify(data));
-	
-	if(confirm(confirmMsg)){
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/sandboxSettingEnroll',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-	  		let message = JSON.stringify(data.return_msg);
-	  		alert(message.replace(/\"/gi, ''));    	    
-	  		sandboxId = data.contents.sandbox_id;
-	  		analsUsePrposCd = data.contents.anals_use_prpos_cd;
-	  		
-	  		sandboxEnrollStatus();
-	  		
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });	
-	}
-}
-
-//샌드박스 설정 수정
-const sandboxSettingUpdate = function (val) {
-		
-	let confirmMsg = '저장 후 다음으로 이동하시겠습니까?';
-	
-	let idcheck = $("#idcheck").val();
-	let image_id = $("input[name='image_id']:checked").val();
-	let docker_image_id = $("#docker_image_id").val();
-	let sandbox_nm = $("#sandbox_nm").val();
-	let sandbox_desc = $("#sandbox_desc").val();
-	let sandboxServerIpGet = $("#sandboxServerIpGet").val();
-	
-	if(sandboxId == ''){
-		alert("임시저장을 해주세요!");
-		return;
-	}
-	
-    if($("input[name='image_id']:checked").length < 1) {
-        alert('선택 항목이 없습니다.');
-        return;
-    }
 	if(sandbox_nm == ''){
 		alert("샌드박스 영문명을 입력해주세요!");
 		$("#sandbox_nm").focus();
@@ -501,7 +460,7 @@ const sandboxSettingUpdate = function (val) {
     });
     
 	const data = {
-   		url: '/services/sandbox/sandboxes/'+sandboxId+'/sandbox-setting/update',
+   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/sandbox-setting/update',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
    		image_id: image_id,
@@ -526,7 +485,11 @@ const sandboxSettingUpdate = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	  		step2();
+	    	if(val == 'B06001'){
+		    	sandboxEnrollStatus();
+	    	}else{
+		  		step2();
+	    	}
 	  		
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
@@ -678,7 +641,7 @@ const step2 = function(){
 	let image_id = $("input[name='image_id']:checked").val();
 	let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
 	let anals_use_prpos_cd_nm = $("#anals_use_prpos_cd_nm_"+image_id).text();
-	location.href = '/sandbox/sand/analysisSandbox/step2/'+sandboxId+'/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
+	location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
 }
 //분석 방식 선택
 const step3 = function(){
@@ -689,8 +652,12 @@ const list = function(){
 	location.href = url+'/list';
 }
 
+//분석 용도 조회
 commonCodeAnalysisUsePurpose();
+//샌드박스 설정 - 포트선택 - IP 조회
 sandboxServerIpGet();
+//샌드박스 단계별 등록 상태 조회
 sandboxEnrollStatus();
-
+//샌드박스 설정 - 샌드박스 설정 상세조회
+sandboxSettingDetail();
 </script>
