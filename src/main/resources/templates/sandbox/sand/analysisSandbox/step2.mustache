@@ -517,17 +517,19 @@ const analysisTargetImagesDetail = function(scenario_id){
 		     	        let valid_cnt = 0;
 		     	        let test_cnt = 0;
 		     	       
-		     	       //파라미터 정의 값
-		     	       $.each(data.contents.anals_model_info, function (idx, el) {
-		     	    	   
-							  insertTr += '<tr>';		
-			                  insertTr += ' <td style="text-align: center;">'+el.anals_model_stage+'</td>';
-			                  insertTr += ' <td style="text-align: center;">'+el.anals_model_dfn+'</td>';
-			                  insertTr += ' <td style="text-align: center;">'+el.anals_model_desc+'</td>';
-			                  insertTr += '</tr>';
-				  	    });
-   						$("#analysisTargetImagesDetail").append(insertTr);
-		     	       
+		     	        //파라미터 정의 값
+		     	        if($("#commonCodeAnalysisScenarioSetting").val() == 'B01002'){
+			     	       $.each(data.contents.anals_model_info, function (idx, el) {
+			     	    	   
+								  insertTr += '<tr>';		
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_stage+'</td>';
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_dfn+'</td>';
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_desc+'</td>';
+				                  insertTr += '</tr>';
+					  	    });
+	   						$("#analysisTargetImagesDetail").append(insertTr);
+		     	        }
+		     	        
    					    //이미지 데이터 셋 이름
 				  	    $.each(data.contents.object_detect_data, function (idx, el) {
      						if('{{anals_use_prpos_cd}}' == 'B13001'){
