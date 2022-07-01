@@ -31,7 +31,6 @@
                   	              
                   <div class="table_btns mt-4">
                     <button class="btn btn-primary" type="button" onclick="btnAdd();">등록</button>
-                    <button class="btn btn-primary" type="button" onclick="btnUpdate();">수정</button>
                     <button class="btn btn-danger btn_remove" onclick="btnDel();">삭제</button>
                   </div>
                   
@@ -217,7 +216,7 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '  <td rowspan="2">';
 	                        insertTr += '    <input class="flat" type="radio" name="radio_sandbox_id" value="'+el.sandbox_id+'">';
 	                        insertTr += '  </td>';
-	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" >'+isEmpty(el.sandbox_nm)+'</span></td>';
+	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" onclick=btnUpdate("'+el.sandbox_id+'");>'+isEmpty(el.sandbox_nm)+'</span></td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.scenario_nm_kor)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
@@ -657,15 +656,8 @@ const btnAdd = function(){
 	location.href = url+'/step1';
 }
 
-const btnUpdate = function(){
+const btnUpdate = function(sandbox_id){
 	
-	let sandbox_id = $("input[name='radio_sandbox_id']:checked").val();
-	
-     if($("input[name='radio_sandbox_id']:checked").length < 1) {
-        alert('선택 항목이 없습니다.');
-        return;
-    }
-    
 	location.href = url+'/update_step1/'+sandbox_id;
 }
 </script>

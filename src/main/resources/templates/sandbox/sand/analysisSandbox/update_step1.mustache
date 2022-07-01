@@ -184,11 +184,12 @@ const progressCd2 = 'B06002';	//등록 완료
 const sandboxAnalysisImagesGet = function(image_id){
 	
 	let anals_use_prpos_cd = $("#anals_use_prpos_cd").val() != null ? $("#anals_use_prpos_cd").val() : '';
-	
+	/*
 	if(anals_use_prpos_cd == ''){
 		alert("선택해주세요!");
 		return;
 	}
+	*/
 	const data = {
 	   		url: '/services/sandbox/sandboxes/analysis-images/get?page_current=1&search=anals_use_prpos_cd:'+anals_use_prpos_cd,
 	   		user_id: 'user00',	
