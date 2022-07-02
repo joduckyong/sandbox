@@ -218,6 +218,7 @@ const selCodeBatchCycle = function(dtl_code){
 	
 	$("#anals_period_dtl_value").empty();
 	let selOp = '';  
+	let selOp2 = '';  
 	if(dtl_code == 'B10001'){
 	    for (var i = 1; i < 29; i++) {
 	    	if(i < 10){
@@ -226,10 +227,12 @@ const selCodeBatchCycle = function(dtl_code){
 				selOp += '<option value='+i+'>' + i + '일</option>';
 	    	}
 	    }		
+	    selOp2 += '<option value="일자">일자</option>';
 	}else if(dtl_code == 'B10002'){
 	    for (var i = 0; i < 7; i++) {
 			selOp += '<option value=0'+i+'>' + dayOfWeek(i) + '요일</option>';
 	    }			
+	    selOp2 += '<option value="요일">요일</option>';
 	}else if(dtl_code == 'B10003'){
 	    for (var i = 0; i < 24; i++) {
 	    	if(i < 10){
@@ -237,11 +240,13 @@ const selCodeBatchCycle = function(dtl_code){
 	    	}else{
 				selOp += '<option value='+i+'>' + i + '시간</option>';
 	    	}
-	    }			
+	    }	
+	    selOp2 += '<option value="시간">시간</option>';
 	}else{
 		selOp += '<option value="">선택</option>';
+		selOp2 += '<option value="선택">선택</option>';
 	}
-  	$("#anals_period_dtl_value").append(selOp);   	
+  	$("#anals_period_dtl_value").append(selOp2);   	
 }
 
 //분석 방식 선택 - 배치 주기 코드 조회(주기1)
