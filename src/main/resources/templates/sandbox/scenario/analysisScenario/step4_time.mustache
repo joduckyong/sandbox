@@ -133,7 +133,7 @@
 	                    </div>
 	                  </div>
                       <div class="right_btns mt-4">
-                        <button class="btn btn-secondary" onclick="jsNext();">이전</button>
+                        <button class="btn btn-secondary" onclick="jsNext('P');">이전</button>
                         <button class="btn btn-warning" onclick="analysisTagetTableDatasetUpdate('T');">임시저장</button>
                         <button class="btn btn-success" onclick="analysisTagetTableDatasetUpdate('N');">등록</button>
                         <button class="btn btn-primary" onclick="jsList();">목록</button>
@@ -226,6 +226,7 @@ const setupCd2 = 'B01002'	//분석 모델, 전처리 모델, 분석 대상 설�
 
 $(document).ready(function(){
 	let anals_detail_setting_cd = '{{anals_detail_setting_cd}}';
+	let target_setup_status_cd = $("#target_setup_status_cd").val();
 	
 	if($("#regst_status_cd").val() != progressCd2){
 		alert("시나리오 작성이 완료되지 않았습니다. 시나리오 작성 페이지로 이동합니다.");
@@ -248,6 +249,10 @@ $(document).ready(function(){
 	}
 	
 	progressBar();
+	
+	if(target_setup_status_cd == progressCd1 || target_setup_status_cd == progressCd2){	//수정화면
+		analysisTargetTableDatasetsDetail();
+	}
 });
 
 //시나리오 등록 단계별 상태
@@ -314,9 +319,10 @@ const analysisTargetTableDatasetsGet = function () {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
+		  	    	let table_id = el.tbl_id.replace(/\./gi, '-');
 		  	    	
 		  	    	insertTr += '<tr onclick="analysisTargetTableColumnDatasetGet(\''+el.tbl_id+'\');">';
-					insertTr += ' <td><input type="checkbox" name="tbl_id" value="'+el.tbl_id+'" disabled></td>';
+					insertTr += ' <td><input type="checkbox" name="tbl_id" id="'+table_id+'" value="'+el.tbl_id+'" disabled></td>';
 					insertTr += ' <td>'+el.schemaname+'</td>';
 					insertTr += ' <td>'+el.tablename+'</td>';
 					insertTr += '</tr>';
@@ -369,6 +375,71 @@ const analysisTargetTableColumnDatasetGet = function (tbl_id) {
 		  	  
 		  		getTableColumnCheck();
   	    	}
+	  	  }
+	  	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//시나리오 등록 > 분석 대상 설정 상세 조회(테이블)
+const analysisTargetTableDatasetsDetail = function () {
+	
+	let scenario_id = '{{scenario_id}}';
+	let tbl_set = new Set();	//테이블 등록여부 체크 용도
+	
+	const data = {
+   		url: '/services/sandbox/scenarios/'+scenario_id+'/analysis-target/table-dataset/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/analysisTargetTableDatasetsDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#tableColumnDataset").empty();
+  	    	
+  	    	if(data.contents != ""){
+  	    		
+  	    		$("#anals_dataset_nm").val(data.contents.anals_dataset_nm);
+	  	    	$("#anals_dataset_desc").val(data.contents.anals_dataset_desc);
+  	    		
+  	    		let insertTr = '';
+		  	    $.each(data.contents.datasets, function (idx, el) {
+		  	    	tbl_set.add(el.tbl_id);
+					let uniqueId = el.tbl_id.replace(/\./gi, '-') + '-' + el.col_id;
+					insertTr += '<tr id="'+uniqueId+'">';
+					insertTr += ' <td></td>';
+					insertTr += ' <td>'+el.tbl_id.split(".")[0]+'</td>';
+					insertTr += ' <td class="blue bold" style="cursor:pointer" onclick="analysisTargetSampleData(\''+el.tbl_id+'\')">'+el.tbl_id.split(".")[1]+'</td>';
+					insertTr += ' <td>'+el.col_id+'</td>';
+					if(el.input_data_yn == 'Y'){
+						insertTr += ' <td><input type="checkbox" name="input_chk" checked/></td>';
+					}else{
+						insertTr += ' <td><input type="checkbox" name="input_chk"/></td>';
+					}
+					if(el.output_data_yn == 'Y'){
+						insertTr += ' <td><input type="checkbox" name="output_chk" checked/></td>';
+					}else{
+						insertTr += ' <td><input type="checkbox" name="output_chk"/></td>';
+					}
+					
+					insertTr += '</tr>';
+					
+		  	    });
+		  	  $("#tableColumnDataset").html(insertTr);
+  	    	}
+	  	  }
+	  	  
+	  	  for (let tbl_id of tbl_set){
+	  		  let table_id = tbl_id.replace(/\./gi, '-');
+	  		  $("#"+table_id).prop("checked",true); //등록 여부 체크
 	  	  }
 	  	  
     }).fail(function (error) {
@@ -442,6 +513,7 @@ const analysisTagetTableDatasetUpdate = function(type){
 	let anals_dataset_desc = $("#anals_dataset_desc").val();
 	let tableColumn_columns = new Array();
 	let tableColumn_dataset_len = $("#tableColumnDataset > tr").length;
+	let datasets = getTableColumnData();
 	
 	if(!anals_dataset_nm){
 		alert('분석 데이터셋 이름을 입력하세요!');
@@ -453,10 +525,6 @@ const analysisTagetTableDatasetUpdate = function(type){
 		alert('분석 데이터셋 컬럼 정의 데이터를 추가하세요!');
         return;	
 	}
-	
-	$('input:checkbox[name="selected_image_dataset_id"]:checked').each(function(){
-		image_dataset_ids.push($(this).val());
-	});
 	
 	let regstCd = '';
 	let confirmMsg = '';
@@ -476,7 +544,7 @@ const analysisTagetTableDatasetUpdate = function(type){
    		anals_dataset_nm: anals_dataset_nm,
    		anals_dataset_desc: anals_dataset_desc,
    		target_setup_status_cd: regstCd,
-   		
+   		datasets: datasets,
     };
 	
 	if(confirm(confirmMsg)){
@@ -511,8 +579,8 @@ const addTableColumnDataset = function(obj, tbl_id, column_name, uniqueId){
 		insertTr += ' <td>'+tbl_id.split(".")[0]+'</td>';
 		insertTr += ' <td class="blue bold" style="cursor:pointer" onclick="analysisTargetSampleData(\''+tbl_id+'\')">'+tbl_id.split(".")[1]+'</td>';
 		insertTr += ' <td>'+column_name+'</td>';
-		insertTr += ' <td><input type="checkbox" name="input_chk"></td>';
-		insertTr += ' <td><input type="checkbox" name="output_chk"></td>';
+		insertTr += ' <td><input type="checkbox" name="input_chk"/></td>';
+		insertTr += ' <td><input type="checkbox" name="output_chk"/></td>';
 		insertTr += '</tr>';
 		$("#tableColumnDataset").append(insertTr);
 		//스크롤 아래로
@@ -535,28 +603,88 @@ const getTableColumnCheck = function(){
 	});
 }
 
-//분석 대상 설정 테이블/컬럼 상세 모음 데이터 가져오기
+//분석 대상 설정 테이블/컬럼 임시저장 & 저장 & 수정 API datasets 데이터
 const getTableColumnData = function(){
+	
+	let tableColumnarr = new Array();
+	
 	$("#tableColumnDataset > tr").each(function(idx, el){
+		let trObj = {};
+		
 		let id = $(el).attr("id");
 		let schema_nm = id.split('-')[0];
 		let table_nm = id.split('-')[1];
 		let table_id = schema_nm + '.' + table_nm;
 		let column_nm = id.split('-')[2];
+		let input_data_yn = $("#" + id + "> td > input[name='input_chk']").is(":checked") ? 'Y' : 'N';
+		let output_data_yn = $("#" + id + "> td > input[name='output_chk']").is(":checked") ? 'Y' : 'N';
+		
+		trObj['tbl_id'] = table_id;
+		trObj['col_id'] = column_nm;
+		trObj['input_data_yn'] = input_data_yn;
+		trObj['output_data_yn'] = output_data_yn;
+		
+		tableColumnarr.push(trObj);
 		
 	});
+	
+	let group = groupBy(tableColumnarr, 'tbl_id');
+	
+	let dataSets = new Array();
+	for(let tableId in group){
+		let obj = {};
+		let tbl_id = tableId;
+		let columns = new Array();
+		for(let col of group[tbl_id]){
+			delete col['tbl_id'];	//객체 안에 tbl_id 속성 제거
+			columns.push(col);
+		}
+		
+		obj['tbl_id'] = tbl_id;
+		obj['columns'] = columns;
+		
+		dataSets.push(obj);
+	}
+	
+	return dataSets;
+}
+
+//그룹바이
+const groupBy = function (data, key) {
+    return data.reduce(function (arr, el) {
+        let group = el[key];
+
+        if (arr[group] === undefined) {
+        	arr[group] = []
+        }
+
+        arr[group].push(el)
+        return arr
+    }, {})
 }
 
 //임시저장 & 이전/다음 단계 이동
-const jsNext = function(){
+const jsNext = function(step){
 	let anals_use_prpos_cd = '{{anals_use_prpos_cd}}';
 	let scenario_id = '{{scenario_id}}';
 	let anals_detail_setting_cd = '{{anals_detail_setting_cd}}';
 	
-	if(anals_detail_setting_cd == setupCd1)	{	//분석 대상만 설정
+	if(step == 'P'){	//이전 버튼
+		if(anals_detail_setting_cd == setupCd1)	{	//분석 대상만 설정
+			step = 1;
+		}else if(anals_detail_setting_cd == setupCd2){	//분석 모델, 전처리 모델, 분석 대상 설정
+			step = 3;
+		}
+	}
+	
+	if(step == 1){
 		location.href='/sandbox/scenario/analysisScenario/step1/'+scenario_id;
-	}else if(anals_detail_setting_cd == setupCd2){	//분석 모델, 전처리 모델, 분석 대상 설정
+	}else if(step == 2){
+		location.href='/sandbox/scenario/analysisScenario/step2/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
+	}else if(step == 3){
 		location.href='/sandbox/scenario/analysisScenario/step3/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
+	}else{
+		location.href='/sandbox/scenario/analysisScenario/step4/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
 	}
 	
 }
