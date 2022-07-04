@@ -11,8 +11,8 @@
                 <div class="x_content"> <br>
                   <div class="scenario_depth"> 
                     <ul>
-                      <li id="ps1">샌드박스 설정</li>
-                      <li id="ps2">시나리오 선택</li>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
                       <li id="ps3">분석 방식 선택</li>
                     </ul>
                   </div>
@@ -34,7 +34,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-12 col-md-2 mx-0">
+                        <div class="col-12 col-md-12 mx-0">
 	                      <h3 class="mb-4">샌드박스 상태 : <span class="blue bold" id="sandbox_status"></span></h3>
                          </div>
                       </div>
@@ -635,14 +635,17 @@ const portReset = function(){
 
 //샌드박스 설정
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/update_step1/{{sandbox_id}}';
 }
 //시나리오 선택
 const step2 = function(){
-	let image_id = $("input[name='image_id']:checked").val();
-	let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
-	let anals_use_prpos_cd_nm = $("#anals_use_prpos_cd_nm_"+image_id).text();
-	location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
+	
+	if($("#sandbox_setup_status_cd").val() == "B06002"){
+		let image_id = $("input[name='image_id']:checked").val();
+		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
+		let anals_use_prpos_cd_nm = $("#anals_use_prpos_cd_nm_"+image_id).text();
+		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
+	}
 }
 //분석 방식 선택
 const step3 = function(){
