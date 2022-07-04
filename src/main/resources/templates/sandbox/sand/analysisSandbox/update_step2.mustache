@@ -11,9 +11,9 @@
                 <div class="x_content"> <br>
                   <div class="scenario_depth"> 
                     <ul>
-                      <li id="ps1">샌드박스 설정</li>
-                      <li id="ps2">시나리오 선택</li>
-                      <li id="ps3">분석 방식 선택</li>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
+                      <li id="ps3" style="cursor:pointer" onclick="step3();">분석 방식 선택</li>
                     </ul>
                   </div>
                   <div class="progress_tab">
@@ -474,7 +474,7 @@ const sandboxScenarioSettingUpdate = function(val){
 	} 
 	
 	const data = {
-       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/detail',
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/update',
        		scenario_id: scenario_id,	
        		scenario_setup_status_cd: val,	
        		modifier_id: 'modifier_id',	
@@ -495,10 +495,9 @@ const sandboxScenarioSettingUpdate = function(val){
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	
       		
+      		sandboxEnrollStatus();
 	        if(val == 'B06002'){
 		        step3();   
-	        }else{
-	      		sandboxEnrollStatus();
 	        }
         }).fail(function (error) {
             alert(JSON.stringify(error));
@@ -624,24 +623,26 @@ const closeModal = function(modalId){
 
 //샌드박스 설정
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/update_step1/{{sandbox_id}}';
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/step2/B13001/시계열 분석';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
 }
 //분석 방식 선택
 const step3 = function(){
 	
-	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
-	
-	if(commonCodeAnalysisScenarioSetting == ''){
-		alert("선택해주세요!");
-		$("#commonCodeAnalysisScenarioSetting").focus();
-		return;
-	} 
-	
-	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting;
+	if($("#scenario_setup_status_cd").val() == "B06002"){
+		let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
+		
+		if(commonCodeAnalysisScenarioSetting == ''){
+			alert("선택해주세요!");
+			$("#commonCodeAnalysisScenarioSetting").focus();
+			return;
+		} 
+		
+		location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting+'/{{anals_use_prpos_cd_nm}}';
+	}
 }
 //분석 시나리오 관리
 const list = function(){
