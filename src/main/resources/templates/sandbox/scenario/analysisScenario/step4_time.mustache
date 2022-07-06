@@ -606,7 +606,7 @@ const getTableColumnCheck = function(){
 //분석 대상 설정 테이블/컬럼 임시저장 & 저장 & 수정 API datasets 데이터
 const getTableColumnData = function(){
 	
-	let tableColumnarr = new Array();
+	let dataSets = new Array();
 	
 	$("#tableColumnDataset > tr").each(function(idx, el){
 		let trObj = {};
@@ -624,43 +624,11 @@ const getTableColumnData = function(){
 		trObj['input_data_yn'] = input_data_yn;
 		trObj['output_data_yn'] = output_data_yn;
 		
-		tableColumnarr.push(trObj);
+		dataSets.push(trObj);
 		
 	});
 	
-	let group = groupBy(tableColumnarr, 'tbl_id');
-	
-	let dataSets = new Array();
-	for(let tableId in group){
-		let obj = {};
-		let tbl_id = tableId;
-		let columns = new Array();
-		for(let col of group[tbl_id]){
-			delete col['tbl_id'];	//객체 안에 tbl_id 속성 제거
-			columns.push(col);
-		}
-		
-		obj['tbl_id'] = tbl_id;
-		obj['columns'] = columns;
-		
-		dataSets.push(obj);
-	}
-	
 	return dataSets;
-}
-
-//그룹바이
-const groupBy = function (data, key) {
-    return data.reduce(function (arr, el) {
-        let group = el[key];
-
-        if (arr[group] === undefined) {
-        	arr[group] = []
-        }
-
-        arr[group].push(el)
-        return arr
-    }, {})
 }
 
 //임시저장 & 이전/다음 단계 이동
