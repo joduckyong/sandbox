@@ -11,9 +11,9 @@
                 <div class="x_content"> <br>
                   <div class="scenario_depth"> 
                     <ul>
-                      <li id="ps1">샌드박스 설정</li>
-                      <li id="ps2">시나리오 선택</li>
-                      <li id="ps3">분석 방식 선택</li>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
+                      <li id="ps3" style="cursor:pointer" onclick="step3();">분석 방식 선택</li>
                     </ul>
                   </div>
                   <div class="progress_tab">
@@ -101,77 +101,14 @@
                             <table class="table table-striped table-bordered bulk_action">
                               <thead>
                                 <tr>
-                                  <th style="text-align: center;">테이블명<br>(한글명)</th>
-                                  <th style="text-align: center;">테이블명<br>(영문)</th>
                                   <th style="text-align: center;">스키마</th>
-                                  <th style="text-align: center;">컬럼명<br>(한글)</th>
-                                  <th style="text-align: center;">컬럼명<br>(영문)</th>
-                                  <th style="text-align: center;">컬럼<br>타입</th>
-                                  <th style="text-align: center;">컬럼<br>길이</th>
+                                  <th style="text-align: center;">테이블명</th>
+                                  <th style="text-align: center;">컬럼명</th>
                                   <th style="text-align: center;">Input<br>Data</th>
                                   <th style="text-align: center;">Output<br>Data</th>
                                 </tr>
                               </thead>
                               <tbody id="analysisTargetImagesDetail_B13001_2">
-                                <tr>
-                                  <td style="text-align: center;">닐씨</td>
-                                  <td style="text-align: center;"><span class="blue bold" type="button" data-toggle="modal" data-target=".sample_modal">Naair_quality</span></td>
-                                  <td style="text-align: center;">lx</td>
-                                  <td style="text-align: center;">평균 속도</td>
-                                  <td style="text-align: center;">Temperature</td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                </tr>
-                              </tbody>
-                                <tr>
-                                  <td style="text-align: center;">닐씨</td>
-                                  <td style="text-align: center;"><span class="blue bold">Naair_quality</span></td>
-                                  <td style="text-align: center;">lx</td>
-                                  <td style="text-align: center;">평균 속도</td>
-                                  <td style="text-align: center;">Temperature</td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                </tr>
-                              </tbody>
-                                <tr>
-                                  <td style="text-align: center;">닐씨</td>
-                                  <td style="text-align: center;"><span class="blue bold">Naair_quality</span></td>
-                                  <td style="text-align: center;">lx</td>
-                                  <td style="text-align: center;">평균 속도</td>
-                                  <td style="text-align: center;">Temperature</td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                </tr>
-                              </tbody>
-                                <tr>
-                                  <td style="text-align: center;">닐씨</td>
-                                  <td style="text-align: center;"><span class="blue bold">Naair_quality</span></td>
-                                  <td style="text-align: center;">lx</td>
-                                  <td style="text-align: center;">평균 속도</td>
-                                  <td style="text-align: center;">Temperature</td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                </tr>
-                              </tbody>
-                                <tr>
-                                  <td style="text-align: center;">닐씨</td>
-                                  <td style="text-align: center;"><span class="blue bold">Naair_quality</span></td>
-                                  <td style="text-align: center;">lx</td>
-                                  <td style="text-align: center;">평균 속도</td>
-                                  <td style="text-align: center;">Temperature</td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                  <td style="text-align: center;"><input class="flat" id="check-all" type="checkbox"></td>
-                                </tr>
                               </tbody>
                             </table>
                            </div>         
@@ -221,7 +158,7 @@
         </div>      
         
         <!-- code_modal -->
-        <div class="modal fade sample_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade sample_modal" id="sample_modal" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg" style="max-width: 430px;">
             <div class="modal-content">
               <div class="modal-header">
@@ -242,101 +179,31 @@
                       <tbody>
                         <tr>
                           <td>스키마</td>
-                          <td>Lx</td>
+                          <td><span id="spanSchema"></span></td>
                         </tr>
                         <tr>
-                          <td>테이블명(한글)</td>
-                          <td>날씨</td>
-                        </tr>
-                        <tr>
-                          <td>테이블명(영문)</td>
-                          <td>weather</td>
+                          <td>테이블명</td>
+                          <td><span id="spanTableNm"></span></td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                   <br>
                   <h5>샘플 데이터</h5>
-                  <div class="table_responsive" style="overflow-x:scroll">
-                    <table class="table table-striped" style="width: 600px">
-                      <colgroup>
+                  <div class="table_responsive" style="max-height:330px; overflow-x:auto;overflow-y:auto;">
+                    <table class="table table-striped" >
+                      <colgroup id="sampleSize">
 					  </colgroup>
-                      <thead>
-                        <tr> 
-                          <th style="text-align: center;">순서</th>
-                          <th style="text-align: center;">timestamp</th>
-                          <th style="text-align: center;">pm10</th>
-                          <th style="text-align: center;">co2</th>
-                          <th style="text-align: center;">no2</th>
-                          <th style="text-align: center;">no3</th>
-                          <th style="text-align: center;">no3</th>
-                          <th style="text-align: center;">no3</th>
-                          <th style="text-align: center;">no3</th>
-                        </tr>
+                      <thead id="sampleKey">
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td style="text-align: center;">1</td>
-                          <td style="text-align: center;">t1</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center;">1</td>
-                          <td style="text-align: center;">t1</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center;">1</td>
-                          <td style="text-align: center;">t1</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center;">1</td>
-                          <td style="text-align: center;">t1</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center;">1</td>
-                          <td style="text-align: center;">t1</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                          <td style="text-align: center;">x</td>
-                        </tr>
+                      <tbody id="sampleData">
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-danger" type="button">닫기</button>
+                <button class="btn btn-dark" type="button" onclick="closeModal('sample_modal');">닫기</button>
               </div>                 
             </div>
           </div>
@@ -528,31 +395,40 @@ const analysisTargetImagesDetail = function(scenario_id){
 				  	    });
    						$("#analysisTargetImagesDetail").append(insertTr);
 		     	       
-   					    //이미지 데이터 셋 이름
-				  	    $.each(data.contents.object_detect_data, function (idx, el) {
-     						if('{{anals_use_prpos_cd}}' == 'B13001'){
-     							
-     						}
-     						
-     						if('{{anals_use_prpos_cd}}' == 'B13002'){
-     							insertTr2 += '<tr>';		
-							  insertTr2 += ' <td style="text-align: center;">'+(++i)+'</td>';
-			                  insertTr2 += ' <td style="text-align: center;"><span class="blue bold">'+el.image_dataset_nm+'</span></td>';
-			                  insertTr2 += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
-			                  insertTr2 += ' <td style="text-align: center;">'+el.valid_cnt+'</td>';
-			                  insertTr2 += ' <td style="text-align: center;">'+el.test_cnt+'</td>';
-			                  insertTr2 += ' <td style="text-align: center;">'+isEmpty(el.creat_datetime)+'</td>';
-			                  insertTr2 += '</tr>';
-			                  
-			                  train_cnt += el.train_cnt;
-			                  valid_cnt += el.valid_cnt;
-			                  test_cnt += el.test_cnt;
-     						}
-				  	    });
+   						if('{{anals_use_prpos_cd}}' == 'B13001'){
+	   					    //프로그램 상세 정보 조회
+					  	    $.each(data.contents.time_sequential_data, function (idx, el) {
+	     						
+	     				 		  insertTr2 += '<tr>';		
+				                  insertTr2 += ' <td style="text-align: center;"></td>';
+				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id+'</span></td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.col_id+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.input_data_yn == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.output_data_yn == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += '</tr>';
+				                  
+					  	    });
+					  	    
+					  	 	$("#analysisTargetImagesDetail_B13001_2").append(insertTr2);
+					  	 	
+   						}else if('{{anals_use_prpos_cd}}' == 'B13002'){
+	   					    //이미지 데이터 셋 이름
+					  	    $.each(data.contents.object_detect_data, function (idx, el) {
+	     						
+	     						  insertTr2 += '<tr>';		
+								  insertTr2 += ' <td style="text-align: center;">'+(++i)+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.valid_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.test_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+isEmpty(el.creat_datetime)+'</td>';
+				                  insertTr2 += '</tr>';
+				                  
+				                  train_cnt += el.train_cnt;
+				                  valid_cnt += el.valid_cnt;
+				                  test_cnt += el.test_cnt;
+					  	    });
 
- 						if('{{anals_use_prpos_cd}}' == 'B13001'){
- 						}
- 						if('{{anals_use_prpos_cd}}' == 'B13002'){
  							insertTr2 += '<tr>';	
  							insertTr2 += ' <td colspan="2" style="text-align: center;">총 데이터셋</td>';
  							insertTr2 += ' <td style="text-align: center;">'+train_cnt+'</td>';
@@ -598,9 +474,8 @@ const sandboxScenarioSettingUpdate = function(val){
 	} 
 	
 	const data = {
-       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/detail',
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/update',
        		scenario_id: scenario_id,	
-       		anals_kind_cd: commonCodeAnalysisScenarioSetting,	
        		scenario_setup_status_cd: val,	
        		modifier_id: 'modifier_id',	
 	   		user_id: 'user00',	
@@ -620,16 +495,67 @@ const sandboxScenarioSettingUpdate = function(val){
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	
       		
+      		sandboxEnrollStatus();
 	        if(val == 'B06002'){
 		        step3();   
-	        }else{
-	      		sandboxEnrollStatus();
 	        }
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });		
 	}
     
+}
+
+//분석 대상 설정 테이블 조회
+const analysisTargetSampleData = function(tbl_id){
+	
+	$("#spanTableNm").text(tbl_id); 
+	$("#sampleSize").empty(); 
+	$("#sampleKey").empty(); 
+	$("#sampleData").empty(); 
+	
+	const data = {
+       		url: '/services/sandbox/{{sandbox_id}}/scenarios/analysis-target/tables/'+tbl_id+'/sample/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	        		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/analysisTargetSampleData',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	
+ 		  	   	   let insertSize;		
+ 		  	   	   let insertTh;
+ 		  	   	   let insertTr;
+	     	       $.each(data.contents, function (idx, el) {
+	     	    	  if(idx == 0){
+		     	    	  $.each(el, function (idx2, el2) {
+		     	    		 insertSize += '<col width="130px">';
+		     	    		 insertTh += ' <th style="text-align: center;" width=30>'+idx2+'</th>';
+		     	    	  });
+	     	    	  }
+			  	   });
+    	    	   $("#sampleSize").append(insertSize); 
+    	    	   $("#sampleKey").append(insertTh); 
+	     	       $.each(data.contents, function (idx, el) {
+	     	    	  insertTr += ' <tr>';
+	     	    	  $.each(el, function (idx2, el2) {
+	     	    		 insertTr += ' <td style="text-align: center;" width=30>'+el2+'</td>';
+	     	    	  });
+     	    		  insertTr += ' </tr>';
+			  	   });
+				   $("#sampleData").append(insertTr);   	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+        
+        openModal('sample_modal');   
 }
 
 //진행상태 표시 바
@@ -685,26 +611,38 @@ const sandboxEnrollStatus = function(){
         });	
 }
 
+//모달 열기
+const openModal = function(modalId){
+	$('#'+modalId).modal('show');
+}
+
+//모달 닫기
+const closeModal = function(modalId){
+	$('#'+modalId).modal('hide');
+}
+
 //샌드박스 설정
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/update_step1/{{sandbox_id}}';
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/step2/B13001/시계열 분석';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
 }
 //분석 방식 선택
 const step3 = function(){
 	
-	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
-	
-	if(commonCodeAnalysisScenarioSetting == ''){
-		alert("선택해주세요!");
-		$("#commonCodeAnalysisScenarioSetting").focus();
-		return;
-	} 
-	
-	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting;
+	if($("#scenario_setup_status_cd").val() == "B06002"){
+		let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
+		
+		if(commonCodeAnalysisScenarioSetting == ''){
+			alert("선택해주세요!");
+			$("#commonCodeAnalysisScenarioSetting").focus();
+			return;
+		} 
+		
+		location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting+'/{{anals_use_prpos_cd_nm}}';
+	}
 }
 //분석 시나리오 관리
 const list = function(){

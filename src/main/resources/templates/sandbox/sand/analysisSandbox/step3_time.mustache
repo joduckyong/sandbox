@@ -11,9 +11,9 @@
                 <div class="x_content"> <br>
                   <div class="scenario_depth"> 
                     <ul>
-                      <li id="ps1">샌드박스 설정</li>
-                      <li id="ps2">시나리오 선택</li>
-                      <li id="ps3">분석 방식 선택</li>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
+                      <li id="ps3" style="cursor:pointer" onclick="step3();">분석 방식 선택</li>
                     </ul>
                   </div>
                   
@@ -116,7 +116,7 @@
                                   <td> 
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B16001_period_begin">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -125,7 +125,7 @@
                                   <td> 
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B16001_period_end">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -214,7 +214,7 @@
                                   <td class="d-flex"> 
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17001_period_begin">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -222,7 +222,7 @@
                                     <span> ~ </span>
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17001_period_end">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -234,7 +234,7 @@
                                   <td class="d-flex"> 
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17002_period_begin">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -242,7 +242,7 @@
                                     <span> ~ </span>
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17002_period_end">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -254,7 +254,7 @@
                                   <td class="d-flex"> 
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17003_period_begin">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -262,7 +262,7 @@
                                     <span> ~ </span>
                                     <div class="form-control_box">
                                       <div class="input-prepend input-group">
-				                        <select class="form-control">
+				                        <select class="form-control" id="B17003_period_end">
 				                          <option>주기2</option>
 				                        </select>
                                       </div>
@@ -392,7 +392,18 @@ const commonCodeAnalysisKind = function (){
 const selCodeBatchCycle = function(dtl_code){
 	
 	$("#anals_period_dtl_value").empty();
+	
+	$("#B16001_period_begin").empty();
+	$("#B16001_period_end").empty();
+	$("#B17001_period_begin").empty();
+	$("#B17001_period_end").empty();
+	$("#B17002_period_begin").empty();
+	$("#B17002_period_end").empty();
+	$("#B17003_period_begin").empty();
+	$("#B17003_period_end").empty();
+	
 	let selOp = '';  
+	let selOp2 = '';  
 	if(dtl_code == 'B10001'){
 	    for (var i = 1; i < 29; i++) {
 	    	if(i < 10){
@@ -401,10 +412,12 @@ const selCodeBatchCycle = function(dtl_code){
 				selOp += '<option value='+i+'>' + i + '일</option>';
 	    	}
 	    }		
+	    selOp2 += '<option value="일자">일자</option>';
 	}else if(dtl_code == 'B10002'){
 	    for (var i = 0; i < 7; i++) {
 			selOp += '<option value=0'+i+'>' + dayOfWeek(i) + '요일</option>';
 	    }			
+	    selOp2 += '<option value="요일">요일</option>';
 	}else if(dtl_code == 'B10003'){
 	    for (var i = 0; i < 24; i++) {
 	    	if(i < 10){
@@ -413,10 +426,22 @@ const selCodeBatchCycle = function(dtl_code){
 				selOp += '<option value='+i+'>' + i + '시간</option>';
 	    	}
 	    }			
+	    selOp2 += '<option value="시간">시간</option>';
 	}else{
 		selOp += '<option value="">선택</option>';
+	    selOp2 += '<option value="선택">선택</option>';
 	}
-  	$("#anals_period_dtl_value").append(selOp);   	
+  	$("#anals_period_dtl_value").append(selOp2);   	
+  	
+  	$("#B16001_period_begin").append(selOp);   	
+  	$("#B16001_period_end").append(selOp);   
+  	$("#B17001_period_begin").append(selOp);   	
+  	$("#B17001_period_end").append(selOp);   
+  	$("#B17002_period_begin").append(selOp);   	
+  	$("#B17002_period_end").append(selOp);   
+  	$("#B17003_period_begin").append(selOp);   	
+  	$("#B17003_period_end").append(selOp);   
+  	
 }
 
 //분석 방식 선택 - 배치 주기 코드 조회(주기1)
@@ -556,7 +581,253 @@ const sandboxAnalysisMethodUpdate = function(val){
 		return;
 	} 	
 	
-	let program_list = new Array();
+	let time_sequential_data_batch_info = new Array();
+	let dataObject = new Object();
+	
+	// 1회성
+	if(commonCodeAnalysisCycleSetting == 'B09001'){
+		
+		// 분석 
+		if(commonCodeAnalysisKind == 'B05001'){
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B16001';
+			dataObject.period_begin_ymd = $("#single_cal1").val();
+			dataObject.period_end_ymd = $("#single_cal2").val();			
+			time_sequential_data_batch_info.push(dataObject);
+			
+		// 재학습	
+		}else if(commonCodeAnalysisKind == 'B05002'){
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17001';
+			dataObject.period_begin_ymd = $("#single_cal3").val();
+			dataObject.period_end_ymd = $("#single_cal4").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17002';
+			dataObject.period_begin_ymd = $("#single_cal5").val();
+			dataObject.period_end_ymd = $("#single_cal6").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17003';
+			dataObject.period_begin_ymd = $("#single_cal7").val();
+			dataObject.period_end_ymd = $("#single_cal8").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+		// 분석 + 재학습
+		}else if(commonCodeAnalysisKind == 'B05003'){
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B16001';
+			dataObject.period_begin_ymd = $("#single_cal1").val();
+			dataObject.period_end_ymd = $("#single_cal2").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17001';
+			dataObject.period_begin_ymd = $("#single_cal3").val();
+			dataObject.period_end_ymd = $("#single_cal4").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17002';
+			dataObject.period_begin_ymd = $("#single_cal5").val();
+			dataObject.period_end_ymd = $("#single_cal6").val();	
+			time_sequential_data_batch_info.push(dataObject);
+			
+			dataObject = new Object();
+			dataObject.anals_data_sect_cd = 'B17003';
+			dataObject.period_begin_ymd = $("#single_cal7").val();
+			dataObject.period_end_ymd = $("#single_cal8").val();	
+			time_sequential_data_batch_info.push(dataObject);
+		}
+		
+	// 주기성(배치성)
+	}else if(commonCodeAnalysisCycleSetting == 'B09002'){
+		//매달 
+		if(commonCodeBatchCycle == 'B10001'){
+			// 분석 
+			if(commonCodeAnalysisKind == 'B05001'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_date = $("#B16001_period_begin").val();
+				dataObject.period_end_date = $("#B16001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 재학습	
+			}else if(commonCodeAnalysisKind == 'B05002'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_date = $("#B17001_period_begin").val();
+				dataObject.period_end_date = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_date = $("#B17002_period_begin").val();
+				dataObject.period_end_date = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_date = $("#B17003_period_begin").val();
+				dataObject.period_end_date = $("#B17003_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 분석 + 재학습
+			}else if(commonCodeAnalysisKind == 'B05003'){
+		
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_date = $("#B16001_period_begin").val();
+				dataObject.period_end_date = $("#B16001_period_end").val();
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_date = $("#B17001_period_begin").val();
+				dataObject.period_end_date = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_date = $("#B17002_period_begin").val();
+				dataObject.period_end_date = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_date = $("#B17003_period_begin").val();
+				dataObject.period_end_date = $("#B17003_period_end").val();					
+				time_sequential_data_batch_info.push(dataObject);
+			}
+		//매주
+		}else if(commonCodeBatchCycle == 'B10002'){
+			// 분석 
+			if(commonCodeAnalysisKind == 'B05001'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_day = $("#B16001_period_begin").val();
+				dataObject.period_end_day = $("#B16001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 재학습	
+			}else if(commonCodeAnalysisKind == 'B05002'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_day = $("#B17001_period_begin").val();
+				dataObject.period_end_day = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_day = $("#B17002_period_begin").val();
+				dataObject.period_end_day = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_day = $("#B17003_period_begin").val();
+				dataObject.period_end_day = $("#B17003_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 분석 + 재학습
+			}else if(commonCodeAnalysisKind == 'B05003'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_day = $("#B16001_period_begin").val();
+				dataObject.period_end_day = $("#B16001_period_end").val();
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_day = $("#B17001_period_begin").val();
+				dataObject.period_end_day = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_day = $("#B17002_period_begin").val();
+				dataObject.period_end_day = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_day = $("#B17003_period_begin").val();
+				dataObject.period_end_day = $("#B17003_period_end").val();
+				time_sequential_data_batch_info.push(dataObject);
+				
+			}
+		//매일
+		}else if(commonCodeBatchCycle == 'B10003'){
+			// 분석 
+			if(commonCodeAnalysisKind == 'B05001'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_time = $("#B16001_period_begin").val();
+				dataObject.period_end_time = $("#B16001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 재학습	
+			}else if(commonCodeAnalysisKind == 'B05002'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_time = $("#B17001_period_begin").val();
+				dataObject.period_end_time = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_time = $("#B17002_period_begin").val();
+				dataObject.period_end_time = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_time = $("#B17003_period_begin").val();
+				dataObject.period_end_time = $("#B17003_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+			// 분석 + 재학습
+			}else if(commonCodeAnalysisKind == 'B05003'){
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B16001';
+				dataObject.period_begin_time = $("#B16001_period_begin").val();
+				dataObject.period_end_time = $("#B16001_period_end").val();
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17001';
+				dataObject.period_begin_time = $("#B17001_period_begin").val();
+				dataObject.period_end_time = $("#B17001_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17002';
+				dataObject.period_begin_time = $("#B17002_period_begin").val();
+				dataObject.period_end_time = $("#B17002_period_end").val();	
+				time_sequential_data_batch_info.push(dataObject);
+				
+				dataObject = new Object();
+				dataObject.anals_data_sect_cd = 'B17003';
+				dataObject.period_begin_time = $("#B17003_period_begin").val();
+				dataObject.period_end_time = $("#B17003_period_end").val();
+				time_sequential_data_batch_info.push(dataObject);
+				
+			}
+		}
+	}
 	
 	const data = {
        		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/update',
@@ -570,7 +841,7 @@ const sandboxAnalysisMethodUpdate = function(val){
        		modifier_id: 'modifier_id',		
        		user_id: 'user00',		
        		menu_id: 'menu_id',	 	
-       		image_data_batch_info : program_list,
+       		time_sequential_data_batch_info : time_sequential_data_batch_info,
         };		
 	
 	console.log(JSON.stringify(data));
@@ -801,15 +1072,15 @@ const list = function(){
 
 //샌드박스 설정
 const step1 = function(){
-	location.href = url+'/step1';
+	location.href = url+'/update_step1/{{sandbox_id}}';
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/step2/B13001/시계열 분석';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
 }
 //분석 방식 선택
 const step3 = function(){
-	location.href = url+'/step3';
+	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}/{{anals_use_prpos_cd_nm}}';
 }	
 
 
