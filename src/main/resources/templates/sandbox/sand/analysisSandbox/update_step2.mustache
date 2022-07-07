@@ -435,8 +435,8 @@ const analysisTargetImagesDetail = function(scenario_id){
 					  	    $.each(data.contents.time_sequential_data, function (idx, el) {
 	     						
 	     				 		  insertTr2 += '<tr>';		
-				                  insertTr2 += ' <td style="text-align: center;"></td>';
-				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id+'</span></td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.tbl_id.substring(0, el.tbl_id.indexOf('.'))+'</td>';
+				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id.substring(el.tbl_id.indexOf('.')+1)+'</span></td>';
 				                  insertTr2 += ' <td style="text-align: center;">'+el.col_id+'</td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.input_data_yn == 'Y'?'checked':'')+' disabled></td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.output_data_yn == 'Y'?'checked':'')+' disabled></td>';
