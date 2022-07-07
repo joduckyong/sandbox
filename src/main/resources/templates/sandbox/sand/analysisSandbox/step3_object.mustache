@@ -132,7 +132,6 @@ document.title = "LX DT | 샌드박스 등록";
 const commonUrl = '/sandbox/common';
 const url = '/sandbox/sand/analysisSandbox';
 let contents;
-let codeContents;
 
 const progressCd1 = 'B06001';	//등록 중
 const progressCd2 = 'B06002';	//등록 완료
@@ -246,7 +245,7 @@ const selCodeBatchCycle = function(dtl_code){
 		selOp += '<option value="">선택</option>';
 		selOp2 += '<option value="선택">선택</option>';
 	}
-  	$("#anals_period_dtl_value").append(selOp2);   	
+  	$("#anals_period_dtl_value").append(selOp);   	
 }
 
 //분석 방식 선택 - 배치 주기 코드 조회(주기1)
@@ -278,55 +277,6 @@ const commonCodeBatchCycle = function(){
 	
 }
 
-//분석 방식 선택 - 재학습 분석 데이터 선택 코드 조회
-const commonCodeImagesDatasetsCode = function(){
-	const data = {
-       		url: '/services/sandbox/common-code/relearn-analysis-code',
-        };		
-        $.ajax({
-            type: 'POST',
-            url: commonUrl+'/commonCodeImagesDatasetsCode',
-            dataType: 'json',
-            contentType: 'application/json; charset-utf-8',
-            data: JSON.stringify(data)
-        }).done(function (data) {
- 		  	if (data != null) {
- 		  	   	if(data.contents != ""){    	    	
- 			  	   	codeContents = data.contents;
- 		  	   	}
- 		  	}
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });		
-}
-
-
-//샌드박스 분석방식 상세조회
-const sandboxAnalysisMethodDetail = function(){
-	const data = {
-       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/detail',
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',	            		
-        };		
-        $.ajax({
-            type: 'POST',
-            url: url+'/sandboxAnalysisMethodDetail',
-            dataType: 'json',
-            contentType: 'application/json; charset-utf-8',
-            data: JSON.stringify(data)
-        }).done(function (data) {
- 		  	if (data != null) {
- 		  	   	if(data.contents != ""){    	    
-			  	    $.each(data.contents, function (idx, el) {
-				    });     	
- 		  	   	}
- 		  	   	
- 		  	}
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });	
-}
-
 //샌드박스 분석방식 상세조회 - 학습 데이터 개수 조회
 const sandboxAnalysisImageDatasetGet = function(){
 	const data = {
@@ -343,6 +293,7 @@ const sandboxAnalysisImageDatasetGet = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  	   	if(data.contents != ""){    	    
+ 		  	   		contents = data.contents;
 					$("#sandboxAnalysisImageDatasetGet").empty();
 	     	        let insertTr = '';
 			  	    $.each(data.contents, function (idx, el) {
@@ -350,9 +301,8 @@ const sandboxAnalysisImageDatasetGet = function(){
 		                  insertTr += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
 		                  insertTr += ' <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
 		                  insertTr += ' <td style="text-align: center;">'+el.total_cnt+'</td>';
-		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_B17001_'+el.anals_target_image_dataset_id+'" name="file_cnt" id="" value="'+el.file_cnt+'" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
+		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_'+el.anals_data_sect_cd+'" name="file_cnt" id="" value="'+el.file_cnt+'" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
 		                  insertTr += '</tr>';
-		                  insertTr += '<tr>';
 				    });     	
           	   	    $("#sandboxAnalysisImageDatasetGet").append(insertTr);
  		  	   	}
@@ -369,6 +319,8 @@ const sandboxAnalysisMethodUpdate = function(val){
 	let confirmMsg = '';
 	if(val == progressCd1){	//임시 저장
 		confirmMsg = '임시저장 하시겠습니까?';
+	}else{
+		confirmMsg = '등록 하시겠습니까?';
 	}
 	
 	let commonCodeAnalysisCycleSetting = $("input[name='commonCodeAnalysisCycleSetting']:checked").val();
@@ -388,13 +340,11 @@ const sandboxAnalysisMethodUpdate = function(val){
 	
 	let program_list = new Array();
     $.each(contents, function (idx, el) {
-	    $.each(codeContents, function (idx2, el2) {
-			let data = new Object();
-			data.anals_target_image_dataset_id = el.image_dataset_id;
-			data.anals_data_sect_cd = el2.dtl_code;
-			data.file_cnt = $("#file_cnt_"+el2.dtl_code+"_"+el.image_dataset_id).val();
-			program_list.push(data);
-	    });
+		let data = new Object();
+		data.anals_target_image_dataset_id = el.image_dataset_id;
+		data.anals_data_sect_cd = el.anals_data_sect_cd;
+		data.file_cnt = $("#file_cnt_"+el.anals_data_sect_cd).val();
+		program_list.push(data);
     });
     
     
@@ -639,11 +589,11 @@ const step1 = function(){
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}';
 }
 //분석 방식 선택
 const step3 = function(){
-	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}';
 }	
 
 
@@ -652,7 +602,6 @@ const initMain = function(){
 	commonCodeAnalysisCycleSetting();
 	commonCodeAnalysisKind();
 	commonCodeBatchCycle();
-	commonCodeImagesDatasetsCode();
 	div_main();
 	$("#div_B09002").hide();	
 	

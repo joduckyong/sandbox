@@ -643,8 +643,7 @@ const step2 = function(){
 	if($("#sandbox_setup_status_cd").val() == "B06002"){
 		let image_id = $("input[name='image_id']:checked").val();
 		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
-		let anals_use_prpos_cd_nm = $("#anals_use_prpos_cd_nm_"+image_id).text();
-		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
+		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd;
 	}
 }
 //분석 방식 선택

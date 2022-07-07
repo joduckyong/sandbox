@@ -431,7 +431,7 @@ const selCodeBatchCycle = function(dtl_code){
 		selOp += '<option value="">선택</option>';
 	    selOp2 += '<option value="선택">선택</option>';
 	}
-  	$("#anals_period_dtl_value").append(selOp2);   	
+  	$("#anals_period_dtl_value").append(selOp);   	
   	
   	$("#B16001_period_begin").append(selOp);   	
   	$("#B16001_period_end").append(selOp);   
@@ -1076,11 +1076,11 @@ const step1 = function(){
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}';
 }
 //분석 방식 선택
 const step3 = function(){
-	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}';
 }	
 
 
