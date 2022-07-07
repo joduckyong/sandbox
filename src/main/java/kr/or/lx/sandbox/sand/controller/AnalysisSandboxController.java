@@ -171,13 +171,12 @@ public class AnalysisSandboxController {
 	 * 시나리오 수정
 	 * @return
 	 */
-	@GetMapping("/update_step2/{sandbox_id}/{anals_use_prpos_cd}/{anals_use_prpos_cd_nm}")
-	public String analysisSandboxStepUpdateSet2(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String anals_use_prpos_cd_nm, ModelMap model) throws Exception{
+	@GetMapping("/update_step2/{sandbox_id}/{anals_use_prpos_cd}")
+	public String analysisSandboxStepUpdateSet2(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, ModelMap model) throws Exception{
 		log.info("analysisSandboxStepUpdateSet2");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		
-		model.put("anals_use_prpos_cd_nm", anals_use_prpos_cd_nm);		
 		return "sandbox/sand/analysisSandbox/update_step2";
 	}
 	
@@ -185,14 +184,13 @@ public class AnalysisSandboxController {
 	 * 분석 방식 수정
 	 * @return
 	 */
-	@GetMapping("/update_step3/{sandbox_id}/{anals_use_prpos_cd}/{cd}/{anals_use_prpos_cd_nm}")
-	public String analysisSandboxUpdateStep3(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String cd, @PathVariable String anals_use_prpos_cd_nm, ModelMap model) throws Exception{
+	@GetMapping("/update_step3/{sandbox_id}/{anals_use_prpos_cd}/{cd}")
+	public String analysisSandboxUpdateStep3(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String cd, ModelMap model) throws Exception{
 		log.info("analysisSandboxUpdateStep3");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		
 		model.put("cd", cd);		
-		model.put("anals_use_prpos_cd_nm", anals_use_prpos_cd_nm);	
 		
 		String pageType = "object";
 		if("B13001".equals(anals_use_prpos_cd)) {
