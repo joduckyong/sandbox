@@ -630,7 +630,8 @@ const step1 = function(){
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = '/sandbox/sand/analysisSandbox/step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	
 }
 //분석 방식 선택
 const step3 = function(){
@@ -643,7 +644,7 @@ const step3 = function(){
 		return;
 	} 
 	
-	location.href = url+'/step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting+'/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting;
 }
 //분석 시나리오 관리
 const list = function(){

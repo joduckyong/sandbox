@@ -344,12 +344,17 @@ const sandboxScenarioSettingDetailSet = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  	   	if(data.contents != ""){    	
- 		  	   		
-	 		  	   	sandboxScenarioGet(data.contents.scenario_id);
  		  	   		$("#anals_use_prpos_cd_nm").val(data.contents.anals_use_prpos_cd_nm);
  		  	   		$("#commonCodeAnalysisScenarioSetting").val(data.contents.anals_scenario_setup_cd);
-	 		  	   	sandboxScenarioSettingDetail(data.contents.scenario_id);
 		 		  	$("#scenario_desc").val(data.contents.scenario_desc);        	
+ 		  	   		
+		 		  	if($("#commonCodeAnalysisScenarioSetting").val() == null){
+		 		  		$("#commonCodeAnalysisScenarioSetting").val(data.contents.anals_scenario_setup_cd);
+		 		  	}
+		 		  	if($("#commonCodeAnalysisScenarioSetting").val() != null){
+		 		  	   	sandboxScenarioGet(data.contents.scenario_id);
+		 		  	   	sandboxScenarioSettingDetail(data.contents.scenario_id);
+		 		  	}
  		  	   	}
  		  	}
         }).fail(function (error) {

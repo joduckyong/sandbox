@@ -52,7 +52,13 @@ public class ObjectDetectionController {
 	public String objectDetectionStep(@PathVariable String step, @PathVariable String sandbox_id, @PathVariable String result_id, ModelMap model) throws Exception{
 		log.info("objectDetectionStep");
 		
-		model.put("resourcePath", resourcePath.replace("file:///", ""));		
+		String osName = System.getProperty("os.name").toLowerCase();
+		log.info("osName : "+osName);
+		if(osName.contains("win")) {
+			model.put("resourcePath", resourcePath.replace("file:///", ""));		
+		}else {
+			model.put("resourcePath", resourcePath.replace("file:", ""));		
+		}
 		model.put("uploadPath", uploadPath.replace("**", ""));	
 		model.put("sandbox_id", sandbox_id);	
 		model.put("result_id", result_id);	
