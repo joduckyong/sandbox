@@ -564,6 +564,8 @@ const sandboxAnalysisMethodUpdate = function(val){
 	let confirmMsg = '';
 	if(val == progressCd1){	//임시 저장
 		confirmMsg = '임시저장 하시겠습니까?';
+	}else{
+		confirmMsg = '등록 하시겠습니까?';
 	}
 	
 	let commonCodeAnalysisCycleSetting = $("input[name='commonCodeAnalysisCycleSetting']:checked").val();

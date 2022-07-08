@@ -51,7 +51,7 @@
                             선택
                           </th>
                           <th rowspan="2">샌드박스명</th>
-                          <th colspan="3">샌드박스 정보</th>
+                          <th colspan="4">샌드박스 정보</th>
                           <th rowspan="2">SANDBOX<br>실행 조작</th>
                           <th colspan="3">분석조작</th>
                           <th rowspan="2">분석<br>프로그램</th>
@@ -63,6 +63,7 @@
                           <th>시나리오이름</th>
                           <th>용도</th>
                           <th>주기</th>
+                          <th>분석 모델</th>
                           <th>실행 조작</th>
                           <th>결과 조회</th>
                           <th>파일업로드</th>
@@ -220,6 +221,7 @@ const sandboxesGet = function(page, size_per_page){
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.scenario_nm_kor)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
 	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
+	                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxImageDatasetInfoGet("'+el.sandbox_id+'")>확인</button></td>';
 	                        insertTr += '  <td rowspan="2">'; 
 	                        insertTr += '    <button class="btn_play" id="play_'+el.sandbox_id+'"  onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
 	                        insertTr += '    <button class="btn_pause red" id="pause_'+el.sandbox_id+'" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
