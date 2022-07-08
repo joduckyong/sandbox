@@ -88,7 +88,7 @@ public class AnalysisSandboxController {
 	 * @return
 	 */	
 	@PostMapping("/download/{apiId}")
-    public String downloadFile(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+    public ResponseEntity<?> downloadFile(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
 
 		String url = sandboxApiUrl+param.get("url");
 		
@@ -97,11 +97,14 @@ public class AnalysisSandboxController {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.POST, entity, byte[].class);
        
-        log.info("response.getBody() : "+response.getBody());
         log.info("response.getHeaders() : "+response.getHeaders());
-        Files.write(Paths.get("C:\\lx\\demo1.zip"), response.getBody());
+        log.info("response.getBody() : "+response.getBody());
+//        Files.write(Paths.get("C:\\lx\\demo1.zip"), response.getBody());
         
-        return response.toString();
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "dddd" + "\"")
+				.body(response.getBody());
     }
 	
 	/**
