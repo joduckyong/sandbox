@@ -188,6 +188,10 @@
                           </tbody>
                         </table>
                       </div>
+	                    <div class="right_btns"> 
+		                    <a class="btn btn-primary" href="javascript:void(0);" onclick="sandboxAnalysisFileDownload();" >다운로드</a>
+		                    <a class="btn btn-primary" href="" data-dismiss="modal">확인</a>
+	                    </div>
                     </div>
                     <div class="tab-pane fade" id="preprocessing" role="tabpanel">
 	                  <h5>▣ 데이터 전처리 모델 정보</h5>
@@ -204,8 +208,11 @@
                           </tbody>
                         </table>
                       </div>
+	                    <div class="right_btns"> 
+		                    <a class="btn btn-primary" href="javascript:void(0);" onclick="sandboxPretreatFileDownload();">다운로드</a>
+		                    <a class="btn btn-primary" href="" data-dismiss="modal">확인</a>
+		                </div>
                     </div>
-                    <div class="right_btns"> <a class="btn btn-primary" href="" data-dismiss="modal">확인</a></div>
                   </div>
                 </div>
               </div>
@@ -514,6 +521,8 @@ const modelInfo = function(sandbox_id, sandbox_nm){
     $("#analysisModelInfo").empty();
     $("#pretreatModelInfo").empty();
     
+    $('#sandbox_id').val(sandbox_id);
+    
 	const data1 = {
 	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/get',
 	   		user_id: 'user00',	
@@ -583,16 +592,19 @@ const modelInfo = function(sandbox_id, sandbox_nm){
 }
 
 //샌드박스 - 분석 모델 파일 다운로드
-const sandboxAnalysisFileDownload = function(sandbox_id){
+const sandboxAnalysisFileDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
 	
 	const data = {
 	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/download',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   				
+	   		title: $("#modelInfoTitle").text(),	   				
 	    };		
 	    $.ajax({
 	        type: 'POST',
-	        url: url+'/sandboxAnalysisFileDownload',
+	        url: url+'/download/sandboxAnalysisFileDownload',
 	        dataType: 'json',
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
@@ -606,16 +618,19 @@ const sandboxAnalysisFileDownload = function(sandbox_id){
 }
 
 //샌드박스 - 전처리 모델 파일 다운로드
-const sandboxPretreatFileDownload = function(sandbox_id){
+const sandboxPretreatFileDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
 	
 	const data = {
 	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/pretreat-files/download',
 	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',	   				
+	   		menu_id: 'menu_id',	   	
+	   		title: $("#modelInfoTitle").text(),	   
 	    };		
 	    $.ajax({
 	        type: 'POST',
-	        url: url+'/sandboxPretreatFileDownload',
+	        url: url+'/download/sandboxPretreatFileDownload',
 	        dataType: 'json',
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
@@ -822,9 +837,11 @@ sandboxesGet(page, size_per_page);
 commonCodeSandboxLastStatus();
 
 //5초 마다 helth-check 호출
+/*
 setInterval(function () { 
 	sandboxHealthCheck(); 
 }, 5000);
+*/
 
 const resultPage = function(sandbox_id){
 	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;
