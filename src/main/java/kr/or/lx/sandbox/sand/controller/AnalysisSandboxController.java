@@ -42,7 +42,6 @@ public class AnalysisSandboxController {
      */
 	@GetMapping("/list")
 	public String analysisSandbox(ModelMap model) throws Exception{
-		log.info("analysisSandbox");
 		
 		return "sandbox/sand/analysisSandbox/list";
 	}
@@ -54,7 +53,6 @@ public class AnalysisSandboxController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object analysisSandboxs(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("analysisSandboxs");
 		
 		String url = sandboxApiUrl+param.get("url");
 		
@@ -71,7 +69,6 @@ public class AnalysisSandboxController {
 	@ResponseBody
 	@PostMapping("/file/{apiId}")
 	public Object analysisSandboxsFileUpload(MultipartHttpServletRequest multipartRequest, ModelMap model) throws Exception{
-		log.info("analysisSandboxsFileUpload");
 		log.info("param : "+ObjectUtils.isEmpty(multipartRequest));
 		
 		String url = sandboxApiUrl+multipartRequest.getParameter("url");
@@ -81,7 +78,6 @@ public class AnalysisSandboxController {
 		String menu_id = multipartRequest.getParameter("menu_id");
 		String image_dataset_id = multipartRequest.getParameter("image_dataset_id");
 		String anals_data_sect_cd = multipartRequest.getParameter("anals_data_sect_cd");
-		log.info("url : " + url);
 		
 		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 		body.add("creator_id", creator_id);
@@ -96,7 +92,6 @@ public class AnalysisSandboxController {
 			String name;
 			while (filenameIterator.hasNext()) {
 				name = filenameIterator.next();
-				log.info("File name tag : " + name);
 				List<MultipartFile> fileList = multipartRequest.getFiles(name);
 				for (MultipartFile multipartFile : fileList) {
 					body.add(name, multipartFile.getResource());
@@ -115,7 +110,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/step1")
 	public String analysisSandboxStep1(ModelMap model) throws Exception{
-		log.info("analysisSandboxStep1");
 		
 		return "sandbox/sand/analysisSandbox/step1";
 	}
@@ -126,7 +120,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/step2/{sandbox_id}/{anals_use_prpos_cd}/{anals_use_prpos_cd_nm}")
 	public String analysisSandboxStepSet2(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String anals_use_prpos_cd_nm, ModelMap model) throws Exception{
-		log.info("analysisSandboxStepSet2");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		
@@ -140,7 +133,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/step3/{sandbox_id}/{anals_use_prpos_cd}/{cd}")
 	public String analysisSandboxStep3(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String cd, ModelMap model) throws Exception{
-		log.info("analysisSandboxStep3");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		
@@ -160,7 +152,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/update_step1/{sandbox_id}")
 	public String analysisSandboxUpdateStep1(@PathVariable String sandbox_id, ModelMap model) throws Exception{
-		log.info("analysisSandboxUpdateStep1");
 		
 		model.put("sandbox_id", sandbox_id);
 		return "sandbox/sand/analysisSandbox/update_step1";
@@ -172,7 +163,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/update_step2/{sandbox_id}/{anals_use_prpos_cd}")
 	public String analysisSandboxStepUpdateSet2(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, ModelMap model) throws Exception{
-		log.info("analysisSandboxStepUpdateSet2");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		
@@ -185,7 +175,6 @@ public class AnalysisSandboxController {
 	 */
 	@GetMapping("/update_step3/{sandbox_id}/{anals_use_prpos_cd}/{cd}")
 	public String analysisSandboxUpdateStep3(@PathVariable String sandbox_id, @PathVariable String anals_use_prpos_cd, @PathVariable String cd, ModelMap model) throws Exception{
-		log.info("analysisSandboxUpdateStep3");
 		
 		model.put("sandbox_id", sandbox_id);		
 		model.put("anals_use_prpos_cd", anals_use_prpos_cd);		

@@ -41,7 +41,6 @@ public class ObjectDetectionController {
      */
 	@GetMapping("/{step}/{sandbox_id}/{result_id}")
 	public String objectDetectionStep(@PathVariable String step, @PathVariable String sandbox_id, @PathVariable String result_id, ModelMap model) throws Exception{
-		log.info("objectDetectionStep");
 		
 		String osName = System.getProperty("os.name").toLowerCase();
 		log.info("osName : "+osName);
@@ -63,8 +62,6 @@ public class ObjectDetectionController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object objectDetection(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("objectDetection");
-		
 		String url = sandboxApiUrl+param.get("url");
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
