@@ -1,18 +1,9 @@
 package kr.or.lx.sandbox.result.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +41,6 @@ public class ObjectDetectionController {
      */
 	@GetMapping("/{step}/{sandbox_id}/{result_id}")
 	public String objectDetectionStep(@PathVariable String step, @PathVariable String sandbox_id, @PathVariable String result_id, ModelMap model) throws Exception{
-		log.info("objectDetectionStep");
 		
 		String osName = System.getProperty("os.name").toLowerCase();
 		log.info("osName : "+osName);
@@ -72,8 +62,6 @@ public class ObjectDetectionController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object objectDetection(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("objectDetection");
-		
 		String url = sandboxApiUrl+param.get("url");
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);

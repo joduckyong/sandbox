@@ -60,6 +60,10 @@
                         </div>
                         <div class="col-12 col-md-8 mx-0">
 	                      <h4 class="center_title">분석 결과</h4>
+	     				  <div class="right_btns">
+		                      <button class="btn btn-primary" onclick="sandboxResultDownload();">다운로드</button>
+		                      <button class="btn btn-primary" >모델 정보</button>
+		                  </div> 	                      
 	                      <div class="swiper-container">
 							<div class="swiper-wrapper" id="div_slider">
 							</div>
@@ -164,6 +168,28 @@ const sandboxResultsAnalysisResult = function(){
 	    });		
 }
 
+//샌드박스 - 분석 모델 파일 다운로드
+const sandboxResultDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
+	
+	const data = {
+			url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/download',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/sandboxResultDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    }).fail(function (error) {
+		    location.href = commonUrl+'/urlDownload/'+JSON.stringify(error.responseText).replace(/\"/gi, '');
+	    });		
+	    
+}
 
 //조회
 sandboxResultsAnalysisResult();

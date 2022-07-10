@@ -34,7 +34,6 @@ public class InfoPreprocessingController {
      */
 	@GetMapping("/list")
 	public String infoPreprocessing(ModelMap model) throws Exception{
-		log.info("infoPreprocessing");
 		
 		return "sandbox/info/infoPreprocessing/list";
 	}
@@ -46,7 +45,6 @@ public class InfoPreprocessingController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object pretreatModelsBasicInfo(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("pretreatModelsBasicInfo");
 		
 		String url = sandboxApiUrl+param.get("url");
 		

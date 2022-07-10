@@ -195,11 +195,11 @@ const commonCodeAnalysisKind = function (){
 	    	   			if(idx == 0){
 		    	   			htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'">'+el.dtl_code_nm+'</label></div>';
 	    	   			}else{
-	    	   				if('{{anals_use_prpos_cd}}' == 'B13001' && '{{cd}}' == 'B01001'){
-	    	   					htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'" disabled>'+el.dtl_code_nm+'</label></div>';
-	    	   				}else{
+	    	   		//		if('{{anals_use_prpos_cd}}' == 'B13001' && '{{cd}}' == 'B01001'){
+	    	   		//			htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'" disabled>'+el.dtl_code_nm+'</label></div>';
+	    	   		//		}else{
 	    	   					htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'">'+el.dtl_code_nm+'</label></div>';
-	    	   				}
+	    	   		//		}
 	    	   			}
 	 	     	     });
 	    	   		 
