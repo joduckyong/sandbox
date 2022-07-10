@@ -1,41 +1,23 @@
 package kr.or.lx.sandbox.sand.controller;
 
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -53,9 +35,6 @@ public class AnalysisSandboxController {
     
 	@Autowired
 	private ApiService<?> apiService;
-	
-	@Autowired
-    private RestTemplateBuilder restTemplate;
 	
 	/**
      * 분석 샌드박스 관리
@@ -82,30 +61,6 @@ public class AnalysisSandboxController {
 		
 		return object;
 	}	
-	
-	/**
-	 * 다운로드
-	 * @return
-	 */	
-	@PostMapping("/download/{apiId}")
-    public ResponseEntity<?> downloadFile(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-
-		String url = sandboxApiUrl+param.get("url");
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.POST, entity, byte[].class);
-       
-        log.info("response.getHeaders() : "+response.getHeaders());
-        log.info("response.getBody() : "+response.getBody());
-//        Files.write(Paths.get("C:\\lx\\demo1.zip"), response.getBody());
-        
-		return ResponseEntity.ok()
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "dddd" + "\"")
-				.body(response.getBody());
-    }
 	
 	/**
 	 * 이미지 데이터셋 파일 업로드 첨부 API

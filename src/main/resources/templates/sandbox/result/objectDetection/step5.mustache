@@ -168,29 +168,27 @@ const sandboxResultsAnalysisResult = function(){
 	    });		
 }
 
-//샌드박스 분석 결과 - 결과 다운로드
+//샌드박스 - 분석 모델 파일 다운로드
 const sandboxResultDownload = function(){
 	
-	/*
+	let sandbox_id = $('#sandbox_id').val();
+	
 	const data = {
-	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/download',
+			url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/download',
 	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',	   		
+	   		menu_id: 'menu_id',	   				
 	    };		
 	    $.ajax({
 	        type: 'POST',
-	        url: url+'/sandboxResultDownload',
+	        url: commonUrl+'/download/sandboxResultDownload',
 	        dataType: 'json',
-	        contentType: 'application/zip; charset-utf-8',
+	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data),
-	        cache: false,
-	    }).done(function (blob, status, xhr) {
-	        // check for a filename
-	       
+	    }).done(function (data) {
 	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });	
-	*/    
+		    location.href = commonUrl+'/urlDownload/'+JSON.stringify(error.responseText).replace(/\"/gi, '');
+	    });		
+	    
 }
 
 //조회
