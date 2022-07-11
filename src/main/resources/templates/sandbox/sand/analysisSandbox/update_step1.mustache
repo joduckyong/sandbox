@@ -13,7 +13,7 @@
                     <ul>
                       <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
                       <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
-                      <li id="ps3">분석 방식 선택</li>
+                      <li id="ps3" style="cursor:pointer" onclick="step3();">분석 방식 선택</li>
                     </ul>
                   </div>
                   <div class="progress_tab">
@@ -167,6 +167,7 @@
 		<input type="hidden" name="sandbox_setup_status_cd" id="sandbox_setup_status_cd"/>
 	    <input type="hidden" name="scenario_setup_status_cd" id="scenario_setup_status_cd"/>
 	    <input type="hidden" name="anals_method_status_cd" id="anals_method_status_cd"/>        
+	    <input type="hidden" name="anals_scenario_setup_cd" id="anals_scenario_setup_cd"/>        
 {{>layout/footer}}        
 
 <script>
@@ -388,6 +389,7 @@ const sandboxSettingDetail = function(){
          		$("#sandbox_desc").val(data.contents.sandbox_desc);        	
          		sandboxAnalysisImagesGet(data.contents.image_id);
          		$("#sandboxServerIpGet").val(data.contents.server_id);       
+         		$("#anals_scenario_setup_cd").val(data.contents.anals_scenario_setup_cd);       
          		
   	    		contents = data.contents.programs;
 	     	    let insertTr = '';
@@ -643,13 +645,16 @@ const step2 = function(){
 	if($("#sandbox_setup_status_cd").val() == "B06002"){
 		let image_id = $("input[name='image_id']:checked").val();
 		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
-		let anals_use_prpos_cd_nm = $("#anals_use_prpos_cd_nm_"+image_id).text();
-		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_use_prpos_cd_nm;
+		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd;
 	}
 }
 //분석 방식 선택
 const step3 = function(){
-	location.href = url+'/step3';
+	if($("#sandbox_setup_status_cd").val() == "B06002"){
+		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
+		let anals_scenario_setup_cd = $("#anals_scenario_setup_cd").val();        	
+		location.href = url+'/update_step3/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_scenario_setup_cd;
+	}
 }
 //분석 시나리오 관리
 const list = function(){

@@ -34,7 +34,6 @@ public class InfoAnalysisModelController {
      */
 	@GetMapping("/list")
 	public String infoAnalysisModel(ModelMap model) throws Exception{
-		log.info("infoAnalysisModel");
 		
 		return "sandbox/info/infoAnalysisModel/list";
 	}
@@ -46,7 +45,6 @@ public class InfoAnalysisModelController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object analysisModelsBasicInfo(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("analysisModelsBasicInfo");
 		
 		String url = sandboxApiUrl+param.get("url");
 		

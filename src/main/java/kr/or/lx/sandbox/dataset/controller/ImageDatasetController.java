@@ -42,7 +42,6 @@ public class ImageDatasetController {
      */
 	@GetMapping("/list")
 	public String imageDataset(ModelMap model) throws Exception{
-		log.info("imageDataset");
 		
 		return "sandbox/dataset/imageDataset/list";
 	}
@@ -54,7 +53,6 @@ public class ImageDatasetController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object imagesDatasets(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("imagesDatasets");
 		
 		String url = sandboxApiUrl+param.get("url");
 		
@@ -71,7 +69,6 @@ public class ImageDatasetController {
 	@ResponseBody
 	@PostMapping("/file/{apiId}")
 	public Object imagesDatasetsFileUpload(MultipartHttpServletRequest multipartRequest, ModelMap model) throws Exception{
-		log.info("imagesDatasetsFileUpload");
 		log.info("param : "+ObjectUtils.isEmpty(multipartRequest));
 		
 		String url = sandboxApiUrl+multipartRequest.getParameter("url");
@@ -92,7 +89,6 @@ public class ImageDatasetController {
 			String name;
 			while (filenameIterator.hasNext()) {
 				name = filenameIterator.next();
-				log.info("File name tag : " + name);
 				List<MultipartFile> fileList = multipartRequest.getFiles(name);
 				for (MultipartFile multipartFile : fileList) {
 					body.add(name, multipartFile.getResource());
@@ -112,7 +108,6 @@ public class ImageDatasetController {
 	 */
 	@GetMapping("/add/{image_dataset_id}")
 	public String imageDatasetAdd(@PathVariable String image_dataset_id, ModelMap model) throws Exception{
-		log.info("imageDatasetAdd");
 		
 		model.put("image_dataset_id", image_dataset_id);
 		return "sandbox/dataset/imageDataset/add";

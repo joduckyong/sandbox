@@ -21,7 +21,7 @@
                       <h3 class="mb-4">분석 시나리오 조회 및 선택<span class="red">*</span></h3>
 	                  <div class="right_btns"> 
 	                    <div class="row port_search">
-	                      <input class="form-control mr-1" type="text" value="{{anals_use_prpos_cd_nm}}" readonly>
+	                      <input class="form-control mr-1" type="text" id="anals_use_prpos_cd_nm" value="" readonly>
 	                      <select class="form-control" name="commonCodeAnalysisScenarioSetting" id="commonCodeAnalysisScenarioSetting"> 
 	                      </select>
 	                      <input class="form-control mr-1" type="text" name="query" id="query">
@@ -250,7 +250,7 @@ const commonCodeAnalysisScenarioSetting = function (){
 }
 
 //샌드박스 설정 - 프로그램 상세 정보 조회
-const sandboxScenarioGet = function (){
+const sandboxScenarioGet = function (scenario_id){
 	
 	/*
 	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
@@ -282,7 +282,11 @@ const sandboxScenarioGet = function (){
 		     	        let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
 			     	          insertTr += '<tr>';
-			                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="scenario_id" onclick=snadboxScenarioSettingDetail("'+el.scenario_id+'"); value="'+el.scenario_id+'"></td>';
+			     	          if(el.scenario_id == scenario_id){
+				                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="scenario_id" id="scenario_id_'+el.scenario_id+'" onclick=sandboxScenarioSettingDetail("'+el.scenario_id+'"); value="'+el.scenario_id+'" checked></td>';
+			     	          }else{
+				                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="scenario_id" id="scenario_id_'+el.scenario_id+'" onclick=sandboxScenarioSettingDetail("'+el.scenario_id+'"); value="'+el.scenario_id+'"></td>';
+			     	          }
 			                  insertTr += ' <td style="text-align: center;">'+el.scenario_nm_kor+'</td>';
 			                  insertTr += ' <td style="text-align: center;">'+el.creat_datetime+'</td>';
 			                  insertTr += '</tr>';
@@ -296,7 +300,7 @@ const sandboxScenarioGet = function (){
 }
 
 //시나리오 선택 - 샌드박스 시나리오 선택 상세 조회
-const snadboxScenarioSettingDetail = function (scenario_id){
+const sandboxScenarioSettingDetail = function (scenario_id){
 	
 	const data = {
        		url: '/services/sandbox/sandboxes/'+scenario_id+'/scenario-setting/detail',
@@ -305,7 +309,7 @@ const snadboxScenarioSettingDetail = function (scenario_id){
         };		
         $.ajax({
             type: 'POST',
-            url: url+'/snadboxScenarioSettingDetail',
+            url: url+'/sandboxScenarioSettingDetail',
             dataType: 'json',
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
@@ -321,6 +325,42 @@ const snadboxScenarioSettingDetail = function (scenario_id){
         });		
         
         analysisTargetImagesDetail(scenario_id);        
+}
+
+//시나리오 선택 - 샌드박스 시나리오 선택 상세 조회
+const sandboxScenarioSettingDetailSet = function (){
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/detail',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	        		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxScenarioSettingDetailSet',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	
+ 		  	   		$("#anals_use_prpos_cd_nm").val(data.contents.anals_use_prpos_cd_nm);
+ 		  	   		$("#commonCodeAnalysisScenarioSetting").val(data.contents.anals_scenario_setup_cd);
+		 		  	$("#scenario_desc").val(data.contents.scenario_desc);        	
+ 		  	   		
+		 		  	if($("#commonCodeAnalysisScenarioSetting").val() == null){
+		 		  		$("#commonCodeAnalysisScenarioSetting").val(data.contents.anals_scenario_setup_cd);
+		 		  	}
+		 		  	if($("#commonCodeAnalysisScenarioSetting").val() != null){
+		 		  	   	sandboxScenarioGet(data.contents.scenario_id);
+		 		  	   	sandboxScenarioSettingDetail(data.contents.scenario_id);
+		 		  	}
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+        
 }
 
 //시나리오 선택 - 샌드박스 분석 시나리오 정보 조회
@@ -400,8 +440,8 @@ const analysisTargetImagesDetail = function(scenario_id){
 					  	    $.each(data.contents.time_sequential_data, function (idx, el) {
 	     						
 	     				 		  insertTr2 += '<tr>';		
-				                  insertTr2 += ' <td style="text-align: center;"></td>';
-				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id+'</span></td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.tbl_id.substring(0, el.tbl_id.indexOf('.'))+'</td>';
+				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id.substring(el.tbl_id.indexOf('.')+1)+'</span></td>';
 				                  insertTr2 += ' <td style="text-align: center;">'+el.col_id+'</td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.input_data_yn == 'Y'?'checked':'')+' disabled></td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.output_data_yn == 'Y'?'checked':'')+' disabled></td>';
@@ -627,7 +667,7 @@ const step1 = function(){
 }
 //시나리오 선택
 const step2 = function(){
-	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}';
 }
 //분석 방식 선택
 const step3 = function(){
@@ -641,7 +681,7 @@ const step3 = function(){
 			return;
 		} 
 		
-		location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting+'/{{anals_use_prpos_cd_nm}}';
+		location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting;
 	}
 }
 //분석 시나리오 관리
@@ -665,4 +705,5 @@ divShow();
 commonCodeAnalysisScenarioSetting();
 sandboxEnrollStatus();
 
+sandboxScenarioSettingDetailSet();
 </script>
