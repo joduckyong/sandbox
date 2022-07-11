@@ -488,6 +488,7 @@ const analysisTargetImagesDetail = function(){
 //이미지 데이터셋 모음 상세
 const detailImageDataset = function(imageDatasetIds){
 	for(let i=0; i<imageDatasetIds.length; i++){
+		imageObj[imageDatasetIds[i]] = $("#d_nm"+imageDatasetIds[i]).text();
 		$('input:checkbox[name="image_dataset_id"][value="'+imageDatasetIds[i]+'"]').prop("checked",true);
 		let insertTr = '<tr>';
 			insertTr += '	<td><input type="checkbox" name="selected_image_dataset_id" value="'+imageDatasetIds[i]+'" checked></td>';
