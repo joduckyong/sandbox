@@ -833,11 +833,10 @@ sandboxesGet(page, size_per_page);
 commonCodeSandboxLastStatus();
 
 //5초 마다 helth-check 호출
-/*
 setInterval(function () { 
 	sandboxHealthCheck(); 
 }, 5000);
-*/
+
 
 const resultPage = function(sandbox_id){
 	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;
