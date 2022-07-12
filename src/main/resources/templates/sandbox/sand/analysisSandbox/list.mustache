@@ -600,7 +600,6 @@ const sandboxAnalysisFileDownload = function(){
 	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/download',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   				
-	   		title: $("#modelInfoTitle").text(),	   				
 	    };		
 	    $.ajax({
 	        type: 'POST',
@@ -624,7 +623,6 @@ const sandboxPretreatFileDownload = function(){
 	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/pretreat-files/download',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   	
-	   		title: $("#modelInfoTitle").text(),	   
 	    };		
 	    $.ajax({
 	        type: 'POST',
