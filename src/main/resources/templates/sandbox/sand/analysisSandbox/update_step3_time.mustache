@@ -495,6 +495,82 @@ const commonCodeImagesDatasetsCode = function(){
         });		
 }
 
+//분석 방식 선택 - 시계열 분석 데이터 일자 조회
+const sandboxAnalysisTableDatasetDetail = function(){
+
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/table-datasets/detail',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	            		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxAnalysisTableDatasetDetail',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    
+ 		  	   		$.each(data.contents, function (idx, el) {
+	 		  	   		if(el.anals_data_sect_cd == 'B16001'){
+	 		  	   			
+	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
+			  		  	   		$("#B16001_period_begin").val(el.period_begin_date);
+			  		  	   		$("#B16001_period_end").val(el.period_end_date);
+	 		  	   			}
+		  		  	   		
+		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+			  		  	   		$("#single_cal1").val(el.period_begin_ymd);
+			  		  	   		$("#single_cal2").val(el.period_end_ymd);
+		 		  	   		}
+	 		  	   			
+	 		  	   		}else if(el.anals_data_sect_cd == 'B17001'){
+	 		  	   			
+	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
+			  		  	   		$("#B17001_period_begin").val(el.period_begin_date);
+			  		  	   		$("#B17001_period_end").val(el.period_end_date);
+	 		  	   			}
+		  		  	   		
+		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+			  		  	   		$("#single_cal3").val(el.period_begin_ymd);
+			  		  	   		$("#single_cal4").val(el.period_end_ymd);
+		 		  	   		}	 		  	   			
+	 		  	   			
+	 		  	   		}else if(el.anals_data_sect_cd == 'B17002'){
+	 		  	   			
+	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
+			  		  	   		$("#B17002_period_begin").val(el.period_begin_date);
+			  		  	   		$("#B17002_period_end").val(el.period_end_date);
+	 		  	   			}
+		  		  	   		
+		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+			  		  	   		$("#single_cal5").val(el.period_begin_ymd);
+			  		  	   		$("#single_cal6").val(el.period_end_ymd);
+		 		  	   		}
+		 		  	   		
+	 		  	   		}else if(el.anals_data_sect_cd == 'B17003'){
+	 		  	   			
+	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
+			  		  	   		$("#B17003_period_begin").val(el.period_begin_date);
+			  		  	   		$("#B17003_period_end").val(el.period_end_date);
+	 		  	   			}
+		  		  	   		
+		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+			  		  	   		$("#single_cal7").val(el.period_begin_ymd);
+			  		  	   		$("#single_cal8").val(el.period_end_ymd);
+		 		  	   		}
+		 		  	   		
+	 		  	   		}
+ 		  	   		});    
+ 		  	   	}
+	  	   		
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+        
+}
 
 //샌드박스 분석방식 상세조회
 const sandboxAnalysisMethodDetail = function(){
@@ -528,6 +604,8 @@ const sandboxAnalysisMethodDetail = function(){
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });	
+        
+        sandboxAnalysisTableDatasetDetail();
 }
 
 //샌드박스 분석방식 상세조회 - 학습 데이터 개수 조회
@@ -851,7 +929,7 @@ const sandboxAnalysisMethodUpdate = function(val){
        		modifier_id: 'modifier_id',		
        		user_id: 'user00',		
        		menu_id: 'menu_id',	 	
-       		time_sequential_data_batch_info : program_list,
+       		time_sequential_data_batch_info : time_sequential_data_batch_info,
         };		
 	
 	console.log(JSON.stringify(data));
