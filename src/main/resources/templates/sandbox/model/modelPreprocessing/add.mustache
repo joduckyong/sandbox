@@ -396,74 +396,56 @@ const deleteBasicInfo = function (){
 //데이터 전처리 모델 사용 용도 체크
 const checkPurpose = function (){
 	let val = $('input:radio[name="anals_use_prpos_cd"]:checked').val();
-	if(val == 'B13001') {	//시계열 분석
-		initBasicInfoTime();
-	}else if(val == 'B13002'){	//객체 감지
-		initBasicInfoObject();
+	initBasicInfo(val);
+}
+
+//데이터 전처리 모델 기본 정보 데이터
+const initBasicInfo = function (code){
+	basicInfoNo = 0;
+	
+	if(!code){
+		code = 'B13001';	//시계열 분석 초기
 	}
-}
-
-//데이터 전처리 모델 기본 정보 데이터 - 시계열 분석
-const initBasicInfoTime = function (){
-	basicInfoNo = 0;
-	let insertTr = '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="결측값 보정">결측값 보정</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="결측값을 보정하는 방법">결측값을 보정하는 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
 	
-		insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="중복값 보정">중복값 보정</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="중복값을 보정하는 방법">중복값을 보정하는 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
+	const data = {
+   		url: '/services/sandbox/analysis-models/B04001/basic-infos/Y?anals_use_prpos_cd='+code,
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
 	
-		insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="이상값 보정">이상값 보정</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="이상값을 보정하는 방법">이상값을 보정하는 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
-	
-	$("#basic_infos").html(insertTr);
+	$.ajax({
+        type: 'POST',
+        url: url+'/initBasicInfo',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$("#basic_infos").empty();
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
+		  			insertTr += '	<td></td>';
+		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
+		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
+		  			insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
+		  			insertTr += '</tr>';
+		  			basicInfoNo++;
+		  	    });
+		  	  	$("#basic_infos").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
 			
 }
 
-//데이터 전처리 모델 기본 정보 초기 데이터 - 객체 감지
-const initBasicInfoObject = function (){
-	basicInfoNo = 0;
-	let insertTr = '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="이미지 추출">이미지 추출</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="이미지 추출 방법">이미지 추출 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
-	
-		insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="이미지 색 변환">이미지 색 변환</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="이미지 색 변환 방법">이미지 색 변환 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
-	
-		insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		insertTr += '	<td></td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="이미지 크기 변환">이미지 크기 변환</td>';
-		insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="이미지 크기 변환 방법">이미지 크기 변환 방법</td>';
-		insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		insertTr += '</tr>';
-	basicInfoNo++;
-	
-	$("#basic_infos").html(insertTr);
-			
-}
 
 //데이터 전처리 모델 등록 가이드
 const pretreatModelsGuide = function (){
@@ -532,7 +514,7 @@ const jsList = function(){
 //공통코드
 commonCodeAnalysisUsePurpose();
 
-initBasicInfoTime();
+initBasicInfo();
 
 
 </script>
