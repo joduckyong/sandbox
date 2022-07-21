@@ -518,9 +518,13 @@ const sandboxAnalysisTableDatasetDetail = function(){
 	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
 			  		  	   		$("#B16001_period_begin").val(el.period_begin_date);
 			  		  	   		$("#B16001_period_end").val(el.period_end_date);
-	 		  	   			}
-		  		  	   		
-		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
+			  		  	   		$("#B16001_period_begin").val(el.period_begin_day);
+			  		  	   		$("#B16001_period_end").val(el.period_end_day);
+	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
+			  		  	   		$("#B16001_period_begin").val(el.period_begin_time);
+			  		  	   		$("#B16001_period_end").val(el.period_end_time);
+	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
 			  		  	   		$("#single_cal1").val(el.period_begin_ymd);
 			  		  	   		$("#single_cal2").val(el.period_end_ymd);
 		 		  	   		}
@@ -530,9 +534,13 @@ const sandboxAnalysisTableDatasetDetail = function(){
 	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
 			  		  	   		$("#B17001_period_begin").val(el.period_begin_date);
 			  		  	   		$("#B17001_period_end").val(el.period_end_date);
-	 		  	   			}
-		  		  	   		
-		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
+			  		  	   		$("#B17001_period_begin").val(el.period_begin_day);
+			  		  	   		$("#B17001_period_end").val(el.period_end_day);
+	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
+			  		  	   		$("#B17001_period_begin").val(el.period_begin_time);
+			  		  	   		$("#B17001_period_end").val(el.period_end_time);
+	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
 			  		  	   		$("#single_cal3").val(el.period_begin_ymd);
 			  		  	   		$("#single_cal4").val(el.period_end_ymd);
 		 		  	   		}	 		  	   			
@@ -542,9 +550,13 @@ const sandboxAnalysisTableDatasetDetail = function(){
 	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
 			  		  	   		$("#B17002_period_begin").val(el.period_begin_date);
 			  		  	   		$("#B17002_period_end").val(el.period_end_date);
-	 		  	   			}
-		  		  	   		
-		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
+			  		  	   		$("#B17002_period_begin").val(el.period_begin_day);
+			  		  	   		$("#B17002_period_end").val(el.period_end_day);
+	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
+			  		  	   		$("#B17002_period_begin").val(el.period_begin_time);
+			  		  	   		$("#B17002_period_end").val(el.period_end_time);
+	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
 			  		  	   		$("#single_cal5").val(el.period_begin_ymd);
 			  		  	   		$("#single_cal6").val(el.period_end_ymd);
 		 		  	   		}
@@ -554,9 +566,13 @@ const sandboxAnalysisTableDatasetDetail = function(){
 	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
 			  		  	   		$("#B17003_period_begin").val(el.period_begin_date);
 			  		  	   		$("#B17003_period_end").val(el.period_end_date);
-	 		  	   			}
-		  		  	   		
-		 		  	   		if(el.period_begin_ymd != null && el.period_end_ymd != null){
+	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
+			  		  	   		$("#B17003_period_begin").val(el.period_begin_day);
+			  		  	   		$("#B17003_period_end").val(el.period_end_day);
+	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
+			  		  	   		$("#B17003_period_begin").val(el.period_begin_time);
+			  		  	   		$("#B17003_period_end").val(el.period_end_time);
+	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
 			  		  	   		$("#single_cal7").val(el.period_begin_ymd);
 			  		  	   		$("#single_cal8").val(el.period_end_ymd);
 		 		  	   		}
