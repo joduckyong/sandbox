@@ -336,6 +336,11 @@ const analysisTargetTableDatasetsGet = function () {
 	let query = isEmpty($("#query").val());
 	let schemaname = $("#schemaname").val();
 	
+	if(!schemaname){
+		alert('스키마명을 선택하세요!');
+        return;		
+	}
+	
 	const data = {
    		url: '/services/sandbox/B13001/scenarios/analysis-target/tables/get?search=schemaname:'+schemaname+',tablename:'+query+'',
    		user_id: 'user00',	
