@@ -43,6 +43,8 @@
                          	<div class="col-6">
 	                         	<div class="right_btns"> 
 				                    <div class="row port_search">
+				                      <select class="form-control" name="schemaname" id="schemaname">
+				                      </select>
 				                      <div class="form-group row">
 				                        <div class="form-control_box">
 				                          <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
@@ -112,6 +114,7 @@
 	                                  <th>컬럼명</th>
 	                                  <th>Input Data</th>
 	                                  <th>Output Data</th>
+	                                  <th>데이터 기준 컬럼</th>
 	                                </tr>
 	                              </thead>
 	                              <tbody id="tableColumnDataset">
@@ -224,6 +227,8 @@ const progressCd2 = 'B03002';	//등록 완료
 const setupCd1 = 'B01001'	//분석 대상만 설정
 const setupCd2 = 'B01002'	//분석 모델, 전처리 모델, 분석 대상 설정
 
+let tbl_set = new Set();	//테이블 등록여부 체크 용도
+
 $(document).ready(function(){
 	let anals_detail_setting_cd = '{{anals_detail_setting_cd}}';
 	let target_setup_status_cd = $("#target_setup_status_cd").val();
@@ -293,13 +298,53 @@ const scenarioEnrollStepStatus = function (){
     });	
 }
 
+//시나리오 등록 > 분석 대상 설정 스키마 조회
+const analysisTargetSchemaGet = function () {
+	
+	const data = {
+   		url: '/services/sandbox/B13001/scenarios/analysis-target/schema/get',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/analysisTargetSchemaGet',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#schemaname").empty();
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '<option value="">스키마명</option>';
+		  	    $.each(data.contents, function (idx, schema) {
+		  	    	insertTr += '<option value="'+schema+'">'+schema+'</option>';
+		  	    });
+		  	  $("#schemaname").html(insertTr);
+  	    	}
+	  	  }
+	  	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //시나리오 등록 > 분석 대상 설정 테이블 조회
 const analysisTargetTableDatasetsGet = function () {
 	
 	let query = isEmpty($("#query").val());
+	let schemaname = $("#schemaname").val();
+	
+	if(!schemaname){
+		alert('스키마명을 선택하세요!');
+        return;		
+	}
 	
 	const data = {
-   		url: '/services/sandbox/B13001/scenarios/analysis-target/tables/get?search=tablename:'+query+'',
+   		url: '/services/sandbox/B13001/scenarios/analysis-target/tables/get?search=schemaname:'+schemaname+',tablename:'+query+'',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
     };
@@ -329,6 +374,13 @@ const analysisTargetTableDatasetsGet = function () {
 		  	    });
 		  	  $("#tableDataset").html(insertTr);
   	    	}
+	  	  }
+	  	  
+	  	tableIsCheck();
+	  	  
+	  	for (let tbl_id of tbl_set){
+	  		  let table_id = tbl_id.replace(/\./gi, '-');
+	  		  $("#"+table_id).prop("checked",true); //등록 여부 체크
 	  	  }
 	  	  
     }).fail(function (error) {
@@ -386,7 +438,7 @@ const analysisTargetTableColumnDatasetGet = function (tbl_id) {
 const analysisTargetTableDatasetsDetail = function () {
 	
 	let scenario_id = '{{scenario_id}}';
-	let tbl_set = new Set();	//테이블 등록여부 체크 용도
+	
 	
 	const data = {
    		url: '/services/sandbox/scenarios/'+scenario_id+'/analysis-target/table-dataset/detail',
@@ -429,17 +481,17 @@ const analysisTargetTableDatasetsDetail = function () {
 					}else{
 						insertTr += ' <td><input type="checkbox" name="output_chk"/></td>';
 					}
+					if(el.batch_std == 'Y'){
+						insertTr += ' <td><input type="checkbox" name="batch_chk" checked/></td>';
+					}else{
+						insertTr += ' <td><input type="checkbox" name="batch_chk"/></td>';
+					}
 					
 					insertTr += '</tr>';
 					
 		  	    });
 		  	  $("#tableColumnDataset").html(insertTr);
   	    	}
-	  	  }
-	  	  
-	  	  for (let tbl_id of tbl_set){
-	  		  let table_id = tbl_id.replace(/\./gi, '-');
-	  		  $("#"+table_id).prop("checked",true); //등록 여부 체크
 	  	  }
 	  	  
     }).fail(function (error) {
@@ -581,6 +633,7 @@ const addTableColumnDataset = function(obj, tbl_id, column_name, uniqueId){
 		insertTr += ' <td>'+column_name+'</td>';
 		insertTr += ' <td><input type="checkbox" name="input_chk"/></td>';
 		insertTr += ' <td><input type="checkbox" name="output_chk"/></td>';
+		insertTr += ' <td><input type="checkbox" name="batch_chk"/></td>';
 		insertTr += '</tr>';
 		$("#tableColumnDataset").append(insertTr);
 		//스크롤 아래로
@@ -618,11 +671,13 @@ const getTableColumnData = function(){
 		let column_nm = id.split('-')[2];
 		let input_data_yn = $("#" + id + "> td > input[name='input_chk']").is(":checked") ? 'Y' : 'N';
 		let output_data_yn = $("#" + id + "> td > input[name='output_chk']").is(":checked") ? 'Y' : 'N';
+		let batch_std = $("#" + id + "> td > input[name='batch_chk']").is(":checked") ? 'Y' : 'N';
 		
 		trObj['tbl_id'] = table_id;
 		trObj['col_id'] = column_nm;
 		trObj['input_data_yn'] = input_data_yn;
 		trObj['output_data_yn'] = output_data_yn;
+		trObj['batch_std'] = batch_std;
 		
 		dataSets.push(trObj);
 		
@@ -630,6 +685,14 @@ const getTableColumnData = function(){
 	
 	return dataSets;
 }
+
+//테이블 등록여부 체크
+const tableIsCheck = function(){
+	for (let tbl_id of tbl_set){
+		  let table_id = tbl_id.replace(/\./gi, '-');
+		  $("#"+table_id).prop("checked",true); //등록 여부 체크
+	  }
+};
 
 //임시저장 & 이전/다음 단계 이동
 const jsNext = function(step){
@@ -715,7 +778,8 @@ $('#tableDataset').on('click', 'tr', function(){
 //시나리오 등록 단계별 상태
 scenarioEnrollStepStatus();
 
-//분석 대상 설정 테이블 조회
-analysisTargetTableDatasetsGet();
+//분석 대상 설정 스키마 조회
+analysisTargetSchemaGet();
+
 </script>
 
