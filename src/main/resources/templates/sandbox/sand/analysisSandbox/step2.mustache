@@ -94,6 +94,14 @@
                           </div>
                           <div class="table_responsive" id="div_B13001_2">
                             <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                                <col width="50px">
+                                <col width="115px">
+                                <col width="115px">
+                                <col width="40px">
+                                <col width="40px">
+                                <col width="40px">
+                              </colgroup>                                 
                               <thead>
                                 <tr>
                                   <th style="text-align: center;">스키마</th>
@@ -101,6 +109,7 @@
                                   <th style="text-align: center;">컬럼명</th>
                                   <th style="text-align: center;">Input<br>Data</th>
                                   <th style="text-align: center;">Output<br>Data</th>
+                                  <th style="text-align: center;">데이터<br>기준 컬럼</th>
                                 </tr>
                               </thead>
                               <tbody id="analysisTargetImagesDetail_B13001_2">
@@ -263,9 +272,10 @@ const sandboxScenarioGet = function (){
 	*/
 	
 	let query = $("#query").val() != null ? $("#query").val() : '';
+	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val() != null ? $("#commonCodeAnalysisScenarioSetting").val() : '';
 	
 	const data = {
-       		url: '/services/sandbox/sandboxes/scenarios/{{anals_use_prpos_cd}}/get?search=scenario_nm_kor:'+query,
+			url: '/services/sandbox/sandboxes/scenarios/{{anals_use_prpos_cd}}/get?search=anals_scenario_setup_cd:'+commonCodeAnalysisScenarioSetting+',scenario_nm_kor:'+query,
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	         				
         };		
@@ -407,6 +417,7 @@ const analysisTargetImagesDetail = function(scenario_id){
 				                  insertTr2 += ' <td style="text-align: center;">'+el.col_id+'</td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.input_data_yn == 'Y'?'checked':'')+' disabled></td>';
 				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.output_data_yn == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.batch_std == 'Y'?'checked':'')+' disabled></td>';
 				                  insertTr2 += '</tr>';
 				                  
 					  	    });

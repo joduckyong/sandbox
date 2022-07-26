@@ -96,7 +96,7 @@
                   <div class="border_rows">
                     <div class="row">
                       <div class="form-group row col-12 col-md-12">
-                        <div class="control-label">이미지 데이터셋 명</div>
+                        <div class="control-label" style="text-align: center;">이미지 데이터셋 명</div>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="image_dataset_nm2" id="image_dataset_nm2" readOnly>
                         </div>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="row">
                       <div class="form-group row col-12 col-md-12">
-                        <div class="control-label">구분</div>
+                        <div class="control-label" style="text-align: center;">구분</div>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="dtl_code_nm" id="dtl_code_nm" readOnly>
                           <input class="form-control" type="hidden" name="file_index" id="file_index">
@@ -117,8 +117,9 @@
                     <table class="table table-striped">
                       <colgroup> 
                         <col width="50px">
-                        <col width="200px">
+                        <col width="130px">
                         <col width="100px">
+                        <col width="70px">
                       </colgroup>                    
                       <thead>
                         <tr> 
@@ -126,6 +127,7 @@
                         </tr>
                         <tr> 
                           <th style="text-align: center;">선택</th>
+                          <th style="text-align: center;">파일명</th>
                           <th style="text-align: center;">파일 등록 일시</th>
                           <th style="text-align: center;">파일 갯수</th>
                         </tr>
@@ -226,6 +228,7 @@ const imageDatasetsDetailList = function(page, size_per_page){
 				  	    $.each(data.contents, function (idx, el) {
 			     	      let insertTr = '<tr>';
 			                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="image_dataset_seq_num"  value="'+el.image_dataset_seq_num+'" onclick=selClick("'+el.file_index+'","'+el.file_cnt+'");></td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.file_nm+'</td>';
 			                  insertTr += ' <td style="text-align: center;">'+el.file_index+'</td>';
 			                  insertTr += ' <td style="text-align: center;">'+el.file_cnt+'</td>';
 			                  insertTr += '</tr>';
